@@ -19,7 +19,7 @@ class DroneAltitudeApplet {
         // already active.
         this.#active = false;
 
-        const canvas = document.getElementById('droneAltitude_chart');
+        const canvas = document.getElementById('droneAltitudeApplet_chart');
 
         let config = {
             type: 'bar',

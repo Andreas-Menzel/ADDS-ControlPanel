@@ -16,17 +16,19 @@
 
 <body>
     <div id="page">
-        <div id="map" class="appletWrapper"></div>
+        <div id="map">
+            <div id="mapApplet_map" class="appletWrapper"></div>
+        </div>
 
-        <div id="droneAltitude" class="appletWrapper">
-            <canvas id="droneAltitude_chart"></canvas>
+        <div id="droneAltitudeApplet" class="appletWrapper">
+            <canvas id="droneAltitudeApplet_chart"></canvas>
         </div>
         
-        <div id="droneVelocity" class="appletWrapper">
-            <canvas id="droneVelocity_chart"></canvas>
+        <div id="droneVelocityApplet" class="appletWrapper">
+            <canvas id="droneVelocityApplet_chart"></canvas>
         </div>
 
-        <div id="controlPanel" class="appletWrapper">
+        <div id="controlPanelApplet" class="appletWrapper">
             <p><span id="secondsPassed">?</span> / <span id="maxSeconds">?</span> seconds passed.</p>
             <button onclick="back10secs()">back 10 seconds</button>
             <button onclick="forward10secs()">forward 10 seconds</button>
@@ -37,7 +39,7 @@
     <script src="./js/DroneAltitudeApplet.js"></script>
     <script src="./js/DroneVelocityApplet.js"></script>
 
-    <!--<script src="./js/map.js"></script>-->
+    <script src="./js/MapApplet.js"></script>
     <!--<script src="./js/velocityChart.js"></script>-->
 
     <script src="./demo_data/data_sanitized.js"></script>

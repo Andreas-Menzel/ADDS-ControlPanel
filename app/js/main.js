@@ -99,8 +99,6 @@ class Drone {
         this.#velocityX = data['velocity_x'];
         this.#velocityY = data['velocity_y'];
         this.#velocityZ = data['velocity_z'];
-
-        console.log(data['altitude']);
     }
 
     getDroneId() {
@@ -110,11 +108,11 @@ class Drone {
     getGpsValid() {
         return this.#gpsValid;
     }
-    getGpsLat() {
-        return this.#gpsLat;
-    }
-    getGpsLon() {
+    getGpsLat() { // TODO: incorrect order!
         return this.#gpsLon;
+    }
+    getGpsLon() { // TODO: incorrect order!
+        return this.#gpsLat;
     }
 
     getAltitude() {
@@ -145,13 +143,19 @@ class Drone {
 
 
 // Initialize ALL applets (even though they may not be currently shown)
+let mapApplet = new MapApplet();
 let droneAltitudeApplet = new DroneAltitudeApplet();
 let droneVelocityApplet = new DroneVelocityApplet();
 
 let drones = {
     'demo_drone': new Drone('demo_drone'),
-    //'demo_drone2': new Drone('demo_drone2')
+    //'demo_drone2': new Drone('demo_drone2'),
+    //'demo_drone3': new Drone('demo_drone3'),
+    //'demo_drone4': new Drone('demo_drone4')
 }
+//drones['demo_drone2'].setDemoIndex(20);
+//drones['demo_drone3'].setDemoIndex(40);
+//drones['demo_drone4'].setDemoIndex(60);
 
 function updateDrones() {
     // Update drone list
@@ -163,12 +167,14 @@ function updateDrones() {
 }
 
 function updateApplets() {
+    mapApplet.update(drones);
     droneAltitudeApplet.update(drones);
     droneVelocityApplet.update(drones);
 }
 
 
 window.onload = () => {
+    mapApplet.init();
     droneAltitudeApplet.init();
     droneVelocityApplet.init();
 

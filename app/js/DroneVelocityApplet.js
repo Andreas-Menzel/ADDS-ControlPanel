@@ -1,6 +1,6 @@
 class DroneVelocityApplet {
 
-    #usualMaxVelocity = 10;
+    #usualMaxVelocity = 7;
 
     #active;
     #chart;
@@ -19,7 +19,7 @@ class DroneVelocityApplet {
         // already active.
         this.#active = false;
 
-        const canvas = document.getElementById('droneVelocity_chart');
+        const canvas = document.getElementById('droneVelocityApplet_chart');
 
         let config = {
             type: 'bar',
@@ -27,15 +27,15 @@ class DroneVelocityApplet {
                 labels: [],
                 datasets: [
                     {
-                        label: 'Velocity X in meters / second.',
+                        label: 'Velocity X (North) in meters / second.',
                         data: []
                     },
                     {
-                        label: 'Velocity Y in meters / second.',
+                        label: 'Velocity Y (East) in meters / second.',
                         data: []
                     },
                     {
-                        label: 'Velocity Z in meters / second.',
+                        label: 'Velocity Z (Down) in meters / second.',
                         data: []
                     }
                 ]
