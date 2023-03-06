@@ -118,8 +118,8 @@ class Drone {
         // TODO
         this.#batteryRemaining -= 1;
         this.#batteryRemainingPercent -= 1;
-        this.#remainingFlightTime -= 1;
-        this.#remainingFlightRadius -= 1;
+        this.#remainingFlightTime -= 10;
+        this.#remainingFlightRadius -= 100;
         if(this.#batteryRemaining <= 0) this.#batteryRemaining = Math.random() * 5000;
         if(this.#batteryRemainingPercent <= 0) this.#batteryRemainingPercent = Math.random() * 100;
         if(this.#remainingFlightTime <= 0) this.#remainingFlightTime = Math.random() * 1500;
@@ -187,6 +187,7 @@ let mapApplet = new MapApplet();
 let droneAltitudeApplet = new DroneAltitudeApplet();
 let droneVelocityApplet = new DroneVelocityApplet();
 let droneSoCApplet = new DroneSoCApplet();
+let droneRemDistApplet = new DroneRemDistApplet();
 
 let drones = {
     'demo_drone': new Drone('demo_drone'),
@@ -212,6 +213,7 @@ function updateApplets() {
     droneAltitudeApplet.update(drones);
     droneVelocityApplet.update(drones);
     droneSoCApplet.update(drones);
+    droneRemDistApplet.update(drones);
 }
 
 
@@ -220,6 +222,7 @@ window.onload = () => {
     droneAltitudeApplet.init();
     droneVelocityApplet.init();
     droneSoCApplet.init();
+    droneRemDistApplet.init();
 
     setInterval(() => {
         updateDrones();
