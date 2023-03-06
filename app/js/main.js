@@ -43,6 +43,13 @@ class Drone {
     #velocityY;
     #velocityZ;
 
+
+    #batteryRemaining;
+    #batteryRemainingPercent;
+
+    #remainingFlightTime;
+    #remainingFlightRadius;
+
     setDemoIndex(demoIndex) {
         this.#demoIndex = demoIndex;
     }
@@ -52,10 +59,11 @@ class Drone {
         this.#drone_id = drone_id;
         this.setDefaultValues();
 
-        this.#altitude = Math.random() * 10 + 5;
-        this.#velocityX = Math.random() * 10 - 5;
-        this.#velocityY = Math.random() * 10 - 5;
-        this.#velocityZ = Math.random() * 10 - 5;
+        // TODO: remove
+        this.#batteryRemaining = Math.random() * 5000;
+        this.#batteryRemainingPercent = Math.random() * 100;
+        this.#remainingFlightTime = Math.random() * 1500;
+        this.#remainingFlightRadius = Math.random() * 7000;
     }
 
 
@@ -73,6 +81,12 @@ class Drone {
         this.#velocityX = 0;
         this.#velocityY = 0;
         this.#velocityZ = 0;
+
+
+        this.#batteryRemaining = 0;
+        this.#batteryRemainingPercent = 0;
+        this.#remainingFlightTime = 0;
+        this.#remainingFlightRadius = 0;
     }
 
     updateValues() {
@@ -99,6 +113,17 @@ class Drone {
         this.#velocityX = data['velocity_x'];
         this.#velocityY = data['velocity_y'];
         this.#velocityZ = data['velocity_z'];
+
+
+        // TODO
+        this.#batteryRemaining -= 1;
+        this.#batteryRemainingPercent -= 1;
+        this.#remainingFlightTime -= 1;
+        this.#remainingFlightRadius -= 1;
+        if(this.#batteryRemaining <= 0) this.#batteryRemaining = Math.random() * 5000;
+        if(this.#batteryRemainingPercent <= 0) this.#batteryRemainingPercent = Math.random() * 100;
+        if(this.#remainingFlightTime <= 0) this.#remainingFlightTime = Math.random() * 1500;
+        if(this.#remainingFlightRadius <= 0) this.#remainingFlightRadius = Math.random() * 7000;
     }
 
     getDroneId() {
@@ -139,6 +164,21 @@ class Drone {
         return this.#velocityZ;
     }
 
+
+    getBatteryRemaining() {
+        return this.#batteryRemaining;
+    }
+    getBatteryRemainingPercent() {
+        return this.#batteryRemainingPercent;
+    }
+
+    getRemainingFlightTime() {
+        return this.#remainingFlightTime;
+    }
+    getRemainingFlightRadius() {
+        return this.#remainingFlightRadius;
+    }
+
 }
 
 
@@ -146,16 +186,17 @@ class Drone {
 let mapApplet = new MapApplet();
 let droneAltitudeApplet = new DroneAltitudeApplet();
 let droneVelocityApplet = new DroneVelocityApplet();
+let droneSoCApplet = new DroneSoCApplet();
 
 let drones = {
     'demo_drone': new Drone('demo_drone'),
-    //'demo_drone2': new Drone('demo_drone2'),
-    //'demo_drone3': new Drone('demo_drone3'),
-    //'demo_drone4': new Drone('demo_drone4')
+    'demo_drone2': new Drone('demo_drone2'),
+    'demo_drone3': new Drone('demo_drone3'),
+    'demo_drone4': new Drone('demo_drone4')
 }
-//drones['demo_drone2'].setDemoIndex(20);
-//drones['demo_drone3'].setDemoIndex(40);
-//drones['demo_drone4'].setDemoIndex(60);
+drones['demo_drone2'].setDemoIndex(20);
+drones['demo_drone3'].setDemoIndex(40);
+drones['demo_drone4'].setDemoIndex(60);
 
 function updateDrones() {
     // Update drone list
@@ -170,6 +211,7 @@ function updateApplets() {
     mapApplet.update(drones);
     droneAltitudeApplet.update(drones);
     droneVelocityApplet.update(drones);
+    droneSoCApplet.update(drones);
 }
 
 
@@ -177,6 +219,7 @@ window.onload = () => {
     mapApplet.init();
     droneAltitudeApplet.init();
     droneVelocityApplet.init();
+    droneSoCApplet.init();
 
     setInterval(() => {
         updateDrones();
