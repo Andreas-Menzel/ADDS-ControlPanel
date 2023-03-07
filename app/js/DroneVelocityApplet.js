@@ -1,6 +1,6 @@
 class DroneVelocityApplet {
 
-    #usualMaxVelocity = 7;
+    #usualMaxVelocity = 10;
 
     #active;
     #chart;
@@ -59,15 +59,25 @@ class DroneVelocityApplet {
 
     update(drones) {
         if (this.#active) {
+            let usualMaxVelocity = this.#usualMaxVelocity;
+
             if (this.#droneIds.join(',') === Object.keys(drones).join(',')) {
                 // Same drones, different values
                 for (let i = 0; i < Object.keys(drones).length; ++i) {
                     let droneId = Object.keys(drones)[i];
                     let drone = drones[droneId];
 
-                    this.#chart.config.data.datasets[0].data[i] = drone.getVelocityX();
-                    this.#chart.config.data.datasets[1].data[i] = drone.getVelocityY();
-                    this.#chart.config.data.datasets[2].data[i] = drone.getVelocityZ();
+                    const velocityX = drone.getVelocityX();
+                    const velocityY = drone.getVelocityY();
+                    const velocityZ = drone.getVelocityZ();
+
+                    this.#chart.config.data.datasets[0].data[i] = velocityX;
+                    this.#chart.config.data.datasets[1].data[i] = velocityY;
+                    this.#chart.config.data.datasets[2].data[i] = velocityZ;
+
+                    if(Math.abs(velocityX) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityX);
+                    if(Math.abs(velocityY) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityY);
+                    if(Math.abs(velocityZ) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityZ);
                 }
             } else {
                 // Different drones
@@ -81,12 +91,23 @@ class DroneVelocityApplet {
 
                 for (const [_, drone] of Object.entries(drones)) {
                     this.#chart.config.data.labels.push(drone.getDroneId());
+
+                    const velocityX = drone.getVelocityX();
+                    const velocityY = drone.getVelocityY();
+                    const velocityZ = drone.getVelocityZ();
                     
-                    this.#chart.config.data.datasets[0].data.push(drone.getVelocityX());
-                    this.#chart.config.data.datasets[1].data.push(drone.getVelocityY());
-                    this.#chart.config.data.datasets[2].data.push(drone.getVelocityZ());
+                    this.#chart.config.data.datasets[0].data.push(velocityX);
+                    this.#chart.config.data.datasets[1].data.push(velocityY);
+                    this.#chart.config.data.datasets[2].data.push(velocityZ);
+
+                    if(Math.abs(velocityX) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityX);
+                    if(Math.abs(velocityY) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityY);
+                    if(Math.abs(velocityZ) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityZ);
                 }
             }
+
+            this.#chart.config.options.scales.x.suggestedMin = -usualMaxVelocity;
+            this.#chart.config.options.scales.x.suggestedMax = usualMaxVelocity;
 
             this.#chart.update();
         }
