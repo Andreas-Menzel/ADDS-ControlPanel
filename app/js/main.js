@@ -1,3 +1,25 @@
+
+window.addEventListener('onload', setAppletWrapperHeightsWithControlPanel());
+function setAppletWrapperHeightsWithControlPanel() {
+    let appletWrappers = document.getElementsByClassName('appletWrapper');
+    for (let i = 0; i < appletWrappers.length; ++i) {
+        const appletWrapper = appletWrappers[i];
+
+        let appletControlPanel = appletWrapper.getElementsByClassName('appletControlPanel');
+        let chartWrapper = appletWrapper.getElementsByClassName('chartWrapper');
+
+        if (appletControlPanel.length == 1 && chartWrapper.length == 1) {
+            const appletControlPanelHeight = appletControlPanel[0].offsetHeight;
+            chartWrapper[0].style.height = 'calc(100% - ' + appletControlPanelHeight + 'px)';
+        }
+    }
+}
+
+
+
+
+const useLiveData = false;
+
 let timeOffset = 0;
 
 
@@ -58,12 +80,6 @@ class Drone {
     constructor(drone_id) {
         this.#drone_id = drone_id;
         this.setDefaultValues();
-
-        // TODO: remove
-        this.#batteryRemaining = Math.random() * 5000;
-        this.#batteryRemainingPercent = Math.random() * 100;
-        this.#remainingFlightTime = Math.random() * 1500;
-        this.#remainingFlightRadius = Math.random() * 7000;
     }
 
 
@@ -99,7 +115,7 @@ class Drone {
         const tmpIndex = (this.#demoIndex + timeOffset + demoFlightData.length) % demoFlightData.length;
 
         const data = demoFlightData[tmpIndex];
-        
+
         this.#gpsValid = data['gps_valid'];
         this.#gpsLat = data['gps_lat'];
         this.#gpsLon = data['gps_lon'];
@@ -120,10 +136,10 @@ class Drone {
         this.#batteryRemainingPercent -= 1;
         this.#remainingFlightTime -= 10;
         this.#remainingFlightRadius -= 100;
-        if(this.#batteryRemaining <= 0) this.#batteryRemaining = Math.random() * 5000;
-        if(this.#batteryRemainingPercent <= 0) this.#batteryRemainingPercent = Math.random() * 100;
-        if(this.#remainingFlightTime <= 0) this.#remainingFlightTime = Math.random() * 1500;
-        if(this.#remainingFlightRadius <= 0) this.#remainingFlightRadius = Math.random() * 7000;
+        if (this.#batteryRemaining <= 0) this.#batteryRemaining = Math.random() * 5000;
+        if (this.#batteryRemainingPercent <= 0) this.#batteryRemainingPercent = Math.random() * 100;
+        if (this.#remainingFlightTime <= 0) this.#remainingFlightTime = Math.random() * 1500;
+        if (this.#remainingFlightRadius <= 0) this.#remainingFlightRadius = Math.random() * 7000;
     }
 
     getDroneId() {
@@ -203,8 +219,14 @@ function updateDrones() {
     // Update drone list
     // Add / remove drones
     // Update each drone
-    for (drone_id in drones) {
-        drones[drone_id].updateValuesFromDemoFlight(timeOffset);
+    if (useLiveData) {
+        for (drone_id in drones) {
+            drones[drone_id].updateValues();
+        }
+    } else {
+        for (drone_id in drones) {
+            drones[drone_id].updateValuesFromDemoFlight(timeOffset);
+        }
     }
 }
 

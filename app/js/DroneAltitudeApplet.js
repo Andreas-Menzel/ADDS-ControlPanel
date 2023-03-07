@@ -33,6 +33,7 @@ class DroneAltitudeApplet {
                 ]
             },
             options: {
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         min: 0,

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADDS Control Panel</title>
 
+    <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./libs/OpenLayers-v7.2.2-package/ol.css">
 
@@ -16,30 +17,47 @@
 
 <body>
     <div id="page">
-        <div id="map">
-            <div id="mapApplet_map" class="appletWrapper"></div>
+        <div id="mapApplet" class="appletWrapper">
+            <div id="mapApplet_map"></div>
+            <span class="appletName">MapApplet</span>
         </div>
 
         <div id="droneAltitudeApplet" class="appletWrapper">
-            <canvas id="droneAltitudeApplet_chart"></canvas>
+            <div class="chartWrapper">
+                <canvas id="droneAltitudeApplet_chart" class="appletChart"></canvas>
+            </div>
+            <span class="appletName">DroneAltitudeApplet</span>
         </div>
         
         <div id="droneVelocityApplet" class="appletWrapper">
-            <canvas id="droneVelocityApplet_chart"></canvas>
+            <div class="appletControlPanel">
+                <button class="btnChangeSystem standardButton">Switch to NWU</button>
+                <button class="btnChangeUnit standardButton">Switch to km/h</button>
+            </div>
+            <div class="chartWrapper">
+                <canvas id="droneVelocityApplet_chart" class="appletChart"></canvas>
+            </div>
+            <span class="appletName">DroneVelocityApplet</span>
         </div>
 
         <div id="controlPanelApplet" class="appletWrapper">
             <p><span id="secondsPassed">?</span> / <span id="maxSeconds">?</span> seconds passed.</p>
-            <button onclick="back10secs()">back 10 seconds</button>
-            <button onclick="forward10secs()">forward 10 seconds</button>
+            <button class="standardButton" onclick="back10secs()">back 10 seconds</button>
+            <button class="standardButton" onclick="forward10secs()">forward 10 seconds</button>
         </div>
 
         <div id="droneSoCApplet" class="appletWrapper">
-            <canvas id="droneSoCApplet_chart"></canvas>
+            <div class="chartWrapper">
+                <canvas id="droneSoCApplet_chart" class="appletChart"></canvas>
+            </div>
+            <span class="appletName">DroneSoCApplet</span>
         </div>
 
         <div id="droneRemDistApplet" class="appletWrapper">
-            <canvas id="droneRemDistApplet_chart"></canvas>
+            <div class="chartWrapper">
+                <canvas id="droneRemDistApplet_chart" class="appletChart"></canvas>
+            </div>
+            <span class="appletName">DroneRemDistApplet</span>
         </div>
     </div>
 

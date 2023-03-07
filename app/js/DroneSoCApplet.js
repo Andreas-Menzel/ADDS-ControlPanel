@@ -31,6 +31,7 @@ class DroneSoCApplet {
                 ]
             },
             options: {
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         min: 0,

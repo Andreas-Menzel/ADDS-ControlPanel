@@ -31,6 +31,7 @@ class DroneRemDistApplet {
                 ]
             },
             options: {
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         min: 0,
