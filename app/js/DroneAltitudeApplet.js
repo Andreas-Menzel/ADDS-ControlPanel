@@ -1,6 +1,6 @@
 class DroneAltitudeApplet {
 
-    #usualMaxAltitude = 20;
+    #usualMaxAltitude = 50;
 
     #active;
     #chart;

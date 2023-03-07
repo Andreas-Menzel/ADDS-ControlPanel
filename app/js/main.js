@@ -7,41 +7,70 @@ function setAppletWrapperHeightsWithControlPanel() {
 
         let appletControlPanel = appletWrapper.getElementsByClassName('appletControlPanel');
         let chartWrapper = appletWrapper.getElementsByClassName('chartWrapper');
+        let mapWrapper = appletWrapper.getElementsByClassName('mapWrapper');
 
         if (appletControlPanel.length == 1 && chartWrapper.length == 1) {
             const appletControlPanelHeight = appletControlPanel[0].offsetHeight;
             chartWrapper[0].style.height = 'calc(100% - ' + appletControlPanelHeight + 'px)';
+        }
+        if (appletControlPanel.length == 1 && mapWrapper.length == 1) {
+            const appletControlPanelHeight = appletControlPanel[0].offsetHeight;
+            mapWrapper[0].style.height = 'calc(100% - ' + appletControlPanelHeight + 'px)';
         }
     }
 }
 
 
 
+function toBoolean(stringValue) {
+    if(typeof(stringValue) === 'string') {
+        switch (stringValue?.toLowerCase()?.trim()) {
+            case "true":
+            case "yes":
+            case "1":
+                return true;
+    
+            case "false":
+            case "no":
+            case "0":
+            case null:
+            case undefined:
+                return false;
+    
+            default:
+                return JSON.parse(stringValue);
+        }
+    } else {
+        return stringValue;
+    }
+}
+
 
 const useLiveData = false;
+const trafficControlUrl = 'http://adds-demo.an-men.de/';
 
 let timeOffset = 0;
 
 
 
-document.getElementById('maxSeconds').innerHTML = demoFlightData.length;
-
-const timeStarted = Math.floor(Date.now() / 1000);
-setInterval(() => {
-    document.getElementById('secondsPassed').innerHTML = ((Math.floor(Date.now() / 1000) - timeStarted + timeOffset) + demoFlightData.length) % demoFlightData.length + 1;
-}, 1000);
-
-function back10secs() {
-    timeOffset -= 10;
-
-    document.getElementById('secondsPassed').innerHTML = timeOffset + 1;
-}
-
-function forward10secs() {
-    timeOffset += 10;
-
-    document.getElementById('secondsPassed').innerHTML = timeOffset + 1;
-}
+//document.getElementById('maxSeconds').innerHTML = demoFlightData.length;
+//
+//const timeStarted = Math.floor(Date.now() / 1000);
+//setInterval(() => {
+//    document.getElementById('secondsPassed').innerHTML = ((Math.floor(Date.now() / 1000) - timeStarted + timeOffset) + demoFlightData.length) % demoFlightData.length + 1;
+//}, 1000);
+//
+//function back10secs() {
+//    timeOffset -= 10;
+//
+//    document.getElementById('secondsPassed').innerHTML = timeOffset + 1;
+//}
+//
+//function forward10secs() {
+//    timeOffset += 10;
+//
+//    document.getElementById('secondsPassed').innerHTML = timeOffset + 1;
+//}
 
 
 
@@ -50,6 +79,9 @@ class Drone {
     #demoIndex = 0;
 
     #drone_id;
+
+    #gpsSignalLevel;
+    #gpsSatellitesConnected;
 
     #gpsValid;
     #gpsLat;
@@ -84,6 +116,9 @@ class Drone {
 
 
     setDefaultValues() {
+        this.#gpsSignalLevel = 0;
+        this.#gpsSatellitesConnected = 0;
+
         this.#gpsValid = false;
         this.#gpsLat = 0;
         this.#gpsLon = 0;
@@ -107,6 +142,23 @@ class Drone {
 
     updateValues() {
         // Send request to Traffic Control
+        const payloadAircraftLocation = '{"drone_id": "' + this.#drone_id + '","data_type": "aircraft_location"}';
+        const handleAircraftLocationResponse = () => {
+            this.updateAircraftLocationValues(JSON.parse(xhttpAircraftLocation.responseText));
+        };
+        const xhttpAircraftLocation = new XMLHttpRequest();
+        xhttpAircraftLocation.onload = () => { handleAircraftLocationResponse() };
+        xhttpAircraftLocation.open('GET', trafficControlUrl + 'ask/aircraft_location?payload=' + payloadAircraftLocation, true);
+        xhttpAircraftLocation.send();
+
+        const payloadAircraftPower = '{"drone_id": "' + this.#drone_id + '","data_type": "aircraft_power"}';
+        const handleAircraftPowerResponse = () => {
+            this.updateAircraftPowerValues(JSON.parse(xhttpAircraftPower.responseText));
+        };
+        const xhttpAircraftPower = new XMLHttpRequest();
+        xhttpAircraftPower.onload = () => { handleAircraftPowerResponse() };
+        xhttpAircraftPower.open('GET', trafficControlUrl + 'ask/aircraft_power?payload=' + payloadAircraftPower, true);
+        xhttpAircraftPower.send();
     }
 
     updateValuesFromDemoFlight(timeOffset = 0) {
@@ -142,12 +194,52 @@ class Drone {
         if (this.#remainingFlightRadius <= 0) this.#remainingFlightRadius = Math.random() * 7000;
     }
 
+    updateAircraftLocationValues(response) {
+        this.#gpsSignalLevel = response['response_data']['gps_signal_level'];
+        this.#gpsSatellitesConnected = response['response_data']['gps_satellites_connected'];
+
+        this.#gpsValid = toBoolean(response['response_data']['gps_valid']);
+        if (this.#gpsValid) {
+            this.#gpsLat = response['response_data']['gps_lat'];
+            this.#gpsLon = response['response_data']['gps_lon'];
+        }
+
+        this.#altitude = response['response_data']['altitude'];
+
+        this.#pitch = response['response_data']['pitch'];
+        this.#yaw = response['response_data']['yaw'];
+        this.#roll = response['response_data']['roll'];
+
+        this.#velocityX = response['response_data']['velocity_x'];
+        this.#velocityY = response['response_data']['velocity_y'];
+        this.#velocityZ = response['response_data']['velocity_z'];
+    }
+
+    updateAircraftPowerValues(response) {
+        this.#batteryRemaining = response['response_data']['battery_remaining'];
+        this.#batteryRemainingPercent = response['response_data']['battery_remaining_percent'];
+
+        this.#remainingFlightTime = response['response_data']['remaining_flight_time'];
+        this.#remainingFlightRadius = response['response_data']['remaining_flight_radius'];
+    }
+
+
     getDroneId() {
         return this.#drone_id;
     }
 
+    getGpsSignalLevel() {
+        return this.#gpsSignalLevel;
+    }
+    getGpsSatellitesConnected() {
+        return this.#gpsSatellitesConnected;
+    }
+
     getGpsValid() {
         return this.#gpsValid;
+    }
+    setGpsValid(gpsValid) {
+        this.#gpsValid = gpsValid;
     }
     getGpsLat() { // TODO: incorrect order!
         return this.#gpsLon;
@@ -207,13 +299,13 @@ let droneRemDistApplet = new DroneRemDistApplet();
 
 let drones = {
     'demo_drone': new Drone('demo_drone'),
-    'demo_drone2': new Drone('demo_drone2'),
-    'demo_drone3': new Drone('demo_drone3'),
-    'demo_drone4': new Drone('demo_drone4')
+    //'demo_drone2': new Drone('demo_drone2'),
+    //'demo_drone3': new Drone('demo_drone3'),
+    //'demo_drone4': new Drone('demo_drone4')
 }
-drones['demo_drone2'].setDemoIndex(20);
-drones['demo_drone3'].setDemoIndex(40);
-drones['demo_drone4'].setDemoIndex(60);
+//drones['demo_drone2'].setDemoIndex(20);
+//drones['demo_drone3'].setDemoIndex(40);
+//drones['demo_drone4'].setDemoIndex(60);
 
 function updateDrones() {
     // Update drone list

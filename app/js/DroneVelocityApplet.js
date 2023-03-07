@@ -1,12 +1,10 @@
 class DroneVelocityApplet {
 
-    #usualMaxVelocity = 10;
+    #usualMaxVelocity = 15;
 
     #unit = 'm/s';
-    #unitChanged = false;
 
     #system = 'NED';
-    #systemChanged = false;
 
     #active;
     #chart;
@@ -26,13 +24,23 @@ class DroneVelocityApplet {
     }
 
     #initControlPanel() {
+        const updateLabels = () => {
+            if (this.#system == 'NED') {
+                this.#chart.config.data.datasets[0].label = 'Velocity X (North) in ' + this.#unit;
+                this.#chart.config.data.datasets[1].label = 'Velocity Y (East) in ' + this.#unit;
+                this.#chart.config.data.datasets[2].label = 'Velocity Z (Down) in ' + this.#unit;
+            } else {
+                this.#chart.config.data.datasets[0].label = 'Velocity X (North) in ' + this.#unit;
+                this.#chart.config.data.datasets[1].label = 'Velocity Y (West) in ' + this.#unit;
+                this.#chart.config.data.datasets[2].label = 'Velocity Z (Up) in ' + this.#unit;
+            }
+        };
+
         const droneVelocityApplet = document.getElementById('droneVelocityApplet');
         const btnChangeSystem = droneVelocityApplet.getElementsByClassName('btnChangeSystem')[0];
         const btnChangeUnit = droneVelocityApplet.getElementsByClassName('btnChangeUnit')[0];
 
         btnChangeSystem.addEventListener('click', () => {
-            this.#systemChanged = true;
-
             if (this.#system == 'NED') {
                 this.#system = 'NWU';
                 btnChangeSystem.innerHTML = 'Switch to NED';
@@ -41,12 +49,12 @@ class DroneVelocityApplet {
                 btnChangeSystem.innerHTML = 'Switch to NWU';
             }
 
+            updateLabels();
+
             this.update(this.#drones);
         });
 
         btnChangeUnit.addEventListener('click', () => {
-            this.#unitChanged = true;
-
             if (this.#unit == 'km/h') {
                 this.#unit = 'm/s';
                 btnChangeUnit.innerHTML = 'Switch to km/h';
@@ -54,6 +62,8 @@ class DroneVelocityApplet {
                 this.#unit = 'km/h';
                 btnChangeUnit.innerHTML = 'Switch to m/s';
             }
+
+            updateLabels();
 
             this.update(this.#drones);
         });
@@ -112,21 +122,6 @@ class DroneVelocityApplet {
 
             if (Object.keys(this.#drones).join(',') === Object.keys(drones).join(',')) {
                 // Same drones, different values
-                if (this.#systemChanged || this.#unitChanged) {
-                    this.#systemChanged = false;
-                    this.#unitChanged = false;
-
-                    if (this.#system == 'NED') {
-                        this.#chart.config.data.datasets[0].label = 'Velocity X (North) in ' + this.#unit;
-                        this.#chart.config.data.datasets[1].label = 'Velocity Y (East) in ' + this.#unit;
-                        this.#chart.config.data.datasets[2].label = 'Velocity Z (Down) in ' + this.#unit;
-                    } else {
-                        this.#chart.config.data.datasets[0].label = 'Velocity X (North) in ' + this.#unit;
-                        this.#chart.config.data.datasets[1].label = 'Velocity Y (West) in ' + this.#unit;
-                        this.#chart.config.data.datasets[2].label = 'Velocity Z (Up) in ' + this.#unit;
-                    }
-                }
-
                 for (let i = 0; i < Object.keys(drones).length; ++i) {
                     let droneId = Object.keys(drones)[i];
                     let drone = drones[droneId];

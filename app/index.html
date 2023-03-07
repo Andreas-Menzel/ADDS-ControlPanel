@@ -18,7 +18,13 @@
 <body>
     <div id="page">
         <div id="mapApplet" class="appletWrapper">
-            <div id="mapApplet_map"></div>
+            <div class="appletControlPanel">
+                <button class="btnAutoAdjust standardButton">Disable auto-adjust</button>
+                <button class="btnShowFlightPath standardButton">Show flight path</button>
+            </div>
+            <div class="mapWrapper">
+                <div id="mapApplet_map"></div>
+            </div>
             <span class="appletName">MapApplet</span>
         </div>
 
@@ -40,11 +46,11 @@
             <span class="appletName">DroneVelocityApplet</span>
         </div>
 
-        <div id="controlPanelApplet" class="appletWrapper">
+        <!--<div id="controlPanelApplet" class="appletWrapper">
             <p><span id="secondsPassed">?</span> / <span id="maxSeconds">?</span> seconds passed.</p>
             <button class="standardButton" onclick="back10secs()">back 10 seconds</button>
             <button class="standardButton" onclick="forward10secs()">forward 10 seconds</button>
-        </div>
+        </div>-->
 
         <div id="droneSoCApplet" class="appletWrapper">
             <div class="chartWrapper">
