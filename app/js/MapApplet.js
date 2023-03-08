@@ -4,6 +4,8 @@ class MapApplet {
 
     #map;
     #droneVectors;
+    #takeoffLocationVectors = [];
+    #landingLocationVectors = [];
 
     #preferredZoomLevel = 18;
 
@@ -87,8 +89,11 @@ class MapApplet {
                     let droneId = Object.keys(drones)[i];
                     let drone = drones[droneId];
 
+                    this.#updateVectorPointCoordinates(this.#landingLocationVectors[i], drone.getLandingGpsLat(), drone.getLandingGpsLon());
+                    this.#updateVectorPointCoordinates(this.#takeoffLocationVectors[i], drone.getTakeoffGpsLat(), drone.getTakeoffGpsLon());
+
                     this.#updateVectorPointCoordinates(this.#droneVectors[i], drone.getGpsLat(), drone.getGpsLon());
-                    this.#updateVectorPointRotation(this.#droneVectors[i], drone.getYaw());
+                    this.#updateVectorPointRotation(this.#droneVectors[i], drone.getYaw(), drone.getDroneImageSource(), drone.getDroneImageScale());
                 }
             } else {
                 // Different drones
@@ -99,7 +104,11 @@ class MapApplet {
                 for (drone_id in drones) {
                     const drone = drones[drone_id];
 
-                    this.#droneVectors.push(this.#createAndAddVectorPoint(this.#map, drone.getGpsLat(), drone.getGpsLon()));
+                    this.#landingLocationVectors.push(this.#createAndAddVectorPoint(this.#map, drone.getLandingGpsLat(), drone.getLandingGpsLon(), drone.getLandingLocationImageSource(), drone.getLandingLocationImageScale()));
+                    this.#takeoffLocationVectors.push(this.#createAndAddVectorPoint(this.#map, drone.getTakeoffGpsLat(), drone.getTakeoffGpsLon(), drone.getTakeoffLocationImageSource(), drone.getTakeoffLocationImageScale()));
+                    
+                    this.#droneVectors.push(this.#createAndAddVectorPoint(this.#map, drone.getGpsLat(), drone.getGpsLon(), this.#drones[drone_id].getDroneImageSource()));
+                    // TODO: rotate drone
                 }
             }
 
@@ -108,7 +117,7 @@ class MapApplet {
     }
 
 
-    #createVectorPoint(lat, lon) {
+    #createVectorPoint(lat, lon, imageSource, imageScale) {
         return new ol.layer.Vector({
             source: new ol.source.Vector({
                 features: [
@@ -119,16 +128,15 @@ class MapApplet {
             }),
             style: new ol.style.Style({
                 image: new ol.style.Icon({
-                    src: './img/drone.svg',
-                    rotation: 30,
-                    scale: 1.5
+                    src: imageSource,
+                    scale: imageScale
                 }),
             })
         });
     }
 
-    #createAndAddVectorPoint(map, lat, lon) {
-        let vector = this.#createVectorPoint(lat, lon);
+    #createAndAddVectorPoint(map, lat, lon, imageSource, imageScale) {
+        let vector = this.#createVectorPoint(lat, lon, imageSource, imageScale);
         this.#map.addLayer(vector);
         return vector;
     }
@@ -147,12 +155,12 @@ class MapApplet {
     }
 
 
-    #updateVectorPointRotation(vector, rotation) {
+    #updateVectorPointRotation(vector, rotation, imageSource, imageScale) {
         let newStyle = new ol.style.Style({
             image: new ol.style.Icon({
-                src: './img/drone.svg',
-                rotation: rotation * (3.1415 / 180),
-                scale: 1.5
+                src: imageSource,
+                scale: imageScale,
+                rotation: rotation * (3.1415 / 180)
             }),
         })
 

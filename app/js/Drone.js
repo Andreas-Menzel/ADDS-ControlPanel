@@ -2,6 +2,13 @@ class Drone {
 
     #demoIndex = 0;
 
+    #droneImageSource = './img/drone.svg';
+    #droneImageScale = 1;
+    #takeoffLocationImageSource = './img/TakeoffLocation.svg';
+    #takeoffLocationImageScale = 2;
+    #landingLocationImageSource = './img/LandingLocation.svg';
+    #landingLocationImageScale = 2;
+
     #drone_id;
 
     #gpsSignalLevel;
@@ -200,6 +207,25 @@ class Drone {
     }
 
 
+    getDroneImageSource() {
+        return this.#droneImageSource;
+    }
+    getDroneImageScale() {
+        return this.#droneImageScale;
+    }
+    getTakeoffLocationImageSource() {
+        return this.#takeoffLocationImageSource;
+    }
+    getTakeoffLocationImageScale() {
+        return this.#takeoffLocationImageScale;
+    }
+    getLandingLocationImageSource() {
+        return this.#landingLocationImageSource;
+    }
+    getLandingLocationImageScale() {
+        return this.#landingLocationImageScale;
+    }
+
     getDroneId() {
         return this.#drone_id;
     }
@@ -217,11 +243,11 @@ class Drone {
     setGpsValid(gpsValid) {
         this.#gpsValid = gpsValid;
     }
-    getGpsLat() { // TODO: incorrect order!
-        return this.#gpsLon;
-    }
-    getGpsLon() { // TODO: incorrect order!
+    getGpsLat() {
         return this.#gpsLat;
+    }
+    getGpsLon() {
+        return this.#gpsLon;
     }
 
     getAltitude() {
@@ -261,6 +287,37 @@ class Drone {
     }
     getRemainingFlightRadius() {
         return this.#remainingFlightRadius;
+    }
+
+
+    getTakeoffTime() {
+        return this.#takeoffTime;
+    }
+    getTakeoffGpsValid() {
+        return this.#takeoffGpsValid;
+    }
+    getTakeoffGpsLat() {
+        return this.#takeoffGpsLat;
+    }
+    getTakeoffGpsLon() {
+        return this.#takeoffGpsLon;
+    }
+
+    getLandingTime() {
+        return this.#landingTime;
+    }
+    getLandingGpsValid() {
+        return this.#landingGpsValid;
+    }
+    getLandingGpsLat() {
+        return this.#landingGpsLat;
+    }
+    getLandingGpsLon() {
+        return this.#landingGpsLon;
+    }
+
+    getOperationModes() {
+        return this.#operationModes;
     }
 
 }
