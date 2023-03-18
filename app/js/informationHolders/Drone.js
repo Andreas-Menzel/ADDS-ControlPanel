@@ -102,7 +102,11 @@ class Drone {
         // Update AircraftLocation data
         const payloadAircraftLocation = '{"drone_id": "' + this.#drone_id + '","data_type": "aircraft_location"}';
         const handleAircraftLocationResponse = () => {
-            this.updateAircraftLocationValues(JSON.parse(xhttpAircraftLocation.responseText));
+            const respone = JSON.parse(xhttpAircraftLocation.responseText);
+            // response_data is null if no data has been recorded yet
+            if(respone['executed'] && respone['response_data'] != null) {
+                this.updateAircraftLocationValues(respone);
+            }
         };
         const xhttpAircraftLocation = new XMLHttpRequest();
         xhttpAircraftLocation.onload = () => { handleAircraftLocationResponse() };
@@ -112,7 +116,11 @@ class Drone {
         // Update AircraftPower data
         const payloadAircraftPower = '{"drone_id": "' + this.#drone_id + '","data_type": "aircraft_power"}';
         const handleAircraftPowerResponse = () => {
-            this.updateAircraftPowerValues(JSON.parse(xhttpAircraftPower.responseText));
+            const respone = JSON.parse(xhttpAircraftPower.responseText);
+            // response_data is null if no data has been recorded yet
+            if(respone['executed'] && respone['response_data'] != null) {
+                this.updateAircraftPowerValues(respone);
+            }
         };
         const xhttpAircraftPower = new XMLHttpRequest();
         xhttpAircraftPower.onload = () => { handleAircraftPowerResponse() };
@@ -122,7 +130,11 @@ class Drone {
         // Update FlightData data
         const payloadFlightData = '{"drone_id": "' + this.#drone_id + '","data_type": "flight_data"}';
         const handleFlightDataResponse = () => {
-            this.updateFlightDataValues(JSON.parse(xhttpFlightData.responseText));
+            const respone = JSON.parse(xhttpFlightData.responseText);
+            // response_data is null if no data has been recorded yet
+            if(respone['executed'] && respone['response_data'] != null) {
+                this.updateFlightDataValues(respone);
+            }
         };
         const xhttpFlightData = new XMLHttpRequest();
         xhttpFlightData.onload = () => { handleFlightDataResponse() };
@@ -244,10 +256,10 @@ class Drone {
         this.#gpsValid = gpsValid;
     }
     getGpsLat() {
-        return this.#gpsLat;
+        return this.#gpsLon;
     }
     getGpsLon() {
-        return this.#gpsLon;
+        return this.#gpsLat;
     }
 
     getAltitude() {
@@ -297,10 +309,10 @@ class Drone {
         return this.#takeoffGpsValid;
     }
     getTakeoffGpsLat() {
-        return this.#takeoffGpsLat;
+        return this.#takeoffGpsLon;
     }
     getTakeoffGpsLon() {
-        return this.#takeoffGpsLon;
+        return this.#takeoffGpsLat;
     }
 
     getLandingTime() {
@@ -310,10 +322,10 @@ class Drone {
         return this.#landingGpsValid;
     }
     getLandingGpsLat() {
-        return this.#landingGpsLat;
+        return this.#landingGpsLon;
     }
     getLandingGpsLon() {
-        return this.#landingGpsLon;
+        return this.#landingGpsLat;
     }
 
     getOperationModes() {

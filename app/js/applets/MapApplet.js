@@ -3,20 +3,29 @@ class MapApplet {
     #active;
 
     #map;
+
+    // List of drones currently shown.
+    #drones = {};
     #droneVectors;
+
     #takeoffLocationVectors = [];
     #landingLocationVectors = [];
 
+    #intersections = {};
+    #intersectionVectors = [];
+    
+    // TODO corridors
+    #corridors = {};
+    #corridorVectors = [];
+
     #preferredZoomLevel = 18;
 
-    #autoAdjustEnabled = true;
+    #autoAdjustEnabled = false;
     #autoAdjustPadding = 50;
     #autoAdjustDampener = 20; // set to 1 to disable
 
-    #showFlightPath = false;
-
-    // List of drones currently shown.
-    #drones = [];
+    #showInfrastructure = false;
+    #showInfrastructureChanged = false;
 
 
     constructor() {
@@ -32,7 +41,7 @@ class MapApplet {
     #initControlPanel() {
         const mapApplet = document.getElementById('mapApplet');
         const btnAutoAdjust = mapApplet.getElementsByClassName('btnAutoAdjust')[0];
-        const btnShowFlightPath = mapApplet.getElementsByClassName('btnShowFlightPath')[0];
+        const btnShowInfrastructure = mapApplet.getElementsByClassName('btnShowInfrastructure')[0];
 
         btnAutoAdjust.addEventListener('click', () => {
             if (this.#autoAdjustEnabled) {
@@ -43,19 +52,21 @@ class MapApplet {
                 btnAutoAdjust.innerHTML = 'Disable auto-adjust';
             }
 
-            this.update(this.#drones);
+            this.update(this.#drones, this.#intersections, this.#corridors);
         });
 
-        btnShowFlightPath.addEventListener('click', () => {
-            if (this.#showFlightPath) {
-                this.#showFlightPath = false;
-                btnShowFlightPath.innerHTML = 'Show flight path';
+        btnShowInfrastructure.addEventListener('click', () => {
+            this.#showInfrastructureChanged = true;
+
+            if (this.#showInfrastructure) {
+                this.#showInfrastructure = false;
+                btnShowInfrastructure.innerHTML = 'Show infrastructure';
             } else {
-                this.#showFlightPath = true;
-                btnShowFlightPath.innerHTML = 'Hide flight path';
+                this.#showInfrastructure = true;
+                btnShowInfrastructure.innerHTML = 'Hide infrastructure';
             }
 
-            this.update(this.#drones);
+            this.update(this.#drones, this.#intersections, this.#corridors);
         });
     }
 
@@ -81,13 +92,13 @@ class MapApplet {
     }
 
 
-    update(drones) {
+    update(drones, intersections, corridors) {
         if (this.#active) {
             if (Object.keys(this.#drones).join(',') === Object.keys(drones).join(',')) {
                 // Same drones, different values
-                for (let i = 0; i < Object.keys(drones).length; ++i) {
-                    let droneId = Object.keys(drones)[i];
-                    let drone = drones[droneId];
+                for (let i = 0; i < Object.keys(this.#drones).length; ++i) {
+                    let droneId = Object.keys(this.#drones)[i];
+                    let drone = this.#drones[droneId];
 
                     this.#updateVectorPointCoordinates(this.#landingLocationVectors[i], drone.getLandingGpsLat(), drone.getLandingGpsLon());
                     this.#updateVectorPointCoordinates(this.#takeoffLocationVectors[i], drone.getTakeoffGpsLat(), drone.getTakeoffGpsLon());
@@ -101,14 +112,77 @@ class MapApplet {
 
                 this.#droneVectors = [];
 
-                for (drone_id in drones) {
-                    const drone = drones[drone_id];
+                for (drone_id in this.#drones) {
+                    const drone = this.#drones[drone_id];
 
                     this.#landingLocationVectors.push(this.#createAndAddVectorPoint(this.#map, drone.getLandingGpsLat(), drone.getLandingGpsLon(), drone.getLandingLocationImageSource(), drone.getLandingLocationImageScale()));
                     this.#takeoffLocationVectors.push(this.#createAndAddVectorPoint(this.#map, drone.getTakeoffGpsLat(), drone.getTakeoffGpsLon(), drone.getTakeoffLocationImageSource(), drone.getTakeoffLocationImageScale()));
                     
                     this.#droneVectors.push(this.#createAndAddVectorPoint(this.#map, drone.getGpsLat(), drone.getGpsLon(), this.#drones[drone_id].getDroneImageSource()));
                     // TODO: rotate drone
+                }
+            }
+
+            if(this.#showInfrastructure) {
+                if (!this.#showInfrastructureChanged && Object.keys(this.#intersections).join(',') === Object.keys(intersections).join(',')) {
+                    // Same intersections(, different values)
+                    for (let i = 0; i < Object.keys(this.#intersections).length; ++i) {
+                        let intersectionId = Object.keys(this.#intersections)[i];
+                        let intersection = this.#intersections[intersectionId];
+    
+                        this.#updateVectorPointCoordinates(this.#intersectionVectors[i], intersection.getGpsLon(), intersection.getGpsLat());
+                    }
+                } else {
+                    // Different intersections
+                    this.#intersections = intersections;
+    
+                    this.#intersectionVectors = [];
+    
+                    for(intersectionId in this.#intersections) {
+                        const intersection = this.#intersections[intersectionId];
+    
+                        this.#intersectionVectors.push(this.#createAndAddVectorPoint(this.#map, intersection.getGpsLon(), intersection.getGpsLat(), intersection.getImageSource(), intersection.getImageScale()));
+                    }
+                }
+
+                if (!this.#showInfrastructureChanged && Object.keys(this.#corridors).join(',') === Object.keys(corridors).join(',')) {
+                    // Same corridors(, different values)
+                    for (let i = 0; i < Object.keys(this.#corridors).length; ++i) {
+                        let corridorId = Object.keys(this.#corridors)[i];
+                        let corridor = this.#corridors[corridorId];
+    
+                        // TODO:
+                        //this.#updateVectorPointCoordinates(this.#intersectionVectors[i], intersection.getGpsLon(), intersection.getGpsLat());
+                    }
+                } else {
+                    // Different corridors
+                    this.#corridors = corridors;
+    
+                    this.#corridorVectors = [];
+    
+                    for(corridorId in this.#corridors) {
+                        const corridor = this.#corridors[corridorId];
+
+                        let intersectionA = intersections[corridor.getIntersectionAId()];
+                        let intersectionB = intersections[corridor.getIntersectionBId()];
+                        
+                        // Make sure that the corridor has already updated / fetched its information
+                        if(intersectionA != null && intersectionB != null) {
+                            // Make sure that both intersections have already updated / fetched their information
+                            if(intersectionA.getDataValid() && intersectionB.getDataValid()) {
+                                this.#corridorVectors.push(this.#createAndAddVectorLineString(this.#map, intersectionA.getGpsLat(), intersectionA.getGpsLon(), intersectionB.getGpsLat(), intersectionB.getGpsLon()));
+                            }
+                        }
+                    }
+                }
+
+                this.#showInfrastructureChanged = false;
+            } else {
+                for(const intVec in this.#intersectionVectors) {
+                    this.#map.removeLayer(this.#intersectionVectors[intVec]);
+                }
+                for(const corVec in this.#corridorVectors) {
+                    this.#map.removeLayer(this.#corridorVectors[corVec]);
                 }
             }
 
@@ -165,6 +239,37 @@ class MapApplet {
         })
 
         vector.setStyle(newStyle);
+    }
+
+    #createVectorLineString(latStart, lonStart, latEnd, lonEnd) {
+        let points = [ [lonStart, latStart], [lonEnd, latEnd] ];
+
+        points[0] = ol.proj.transform(points[0], 'EPSG:4326', 'EPSG:3857');
+        points[1] = ol.proj.transform(points[1], 'EPSG:4326', 'EPSG:3857');
+
+        let featureLine = new ol.Feature({
+            geometry: new ol.geom.LineString(points)
+        });
+
+        let vectorLine = new ol.source.Vector({});
+        vectorLine.addFeature(featureLine);
+
+        let vectorLineLayer = new ol.layer.Vector({
+            source: vectorLine,
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({ color: '#000000', weight: 4 }),
+                stroke: new ol.style.Stroke({ color: '#000000', width: 2 })
+            })
+        });
+
+        return vectorLineLayer;
+    }
+
+    #createAndAddVectorLineString(map, latStart, lonStart, latEnd, lonEnd) {
+        let vector = this.#createVectorLineString(latStart, lonStart, latEnd, lonEnd);
+        this.#map.addLayer(vector);
+
+        return vector;
     }
 
     #autoAdjust() {

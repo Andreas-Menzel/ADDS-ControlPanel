@@ -53,27 +53,6 @@ let timeOffset = 0;
 
 
 
-//document.getElementById('maxSeconds').innerHTML = demoFlightData.length;
-//
-//const timeStarted = Math.floor(Date.now() / 1000);
-//setInterval(() => {
-//    document.getElementById('secondsPassed').innerHTML = ((Math.floor(Date.now() / 1000) - timeStarted + timeOffset) + demoFlightData.length) % demoFlightData.length + 1;
-//}, 1000);
-//
-//function back10secs() {
-//    timeOffset -= 10;
-//
-//    document.getElementById('secondsPassed').innerHTML = timeOffset + 1;
-//}
-//
-//function forward10secs() {
-//    timeOffset += 10;
-//
-//    document.getElementById('secondsPassed').innerHTML = timeOffset + 1;
-//}
-
-
-
 
 // Initialize ALL applets (even though they may not be currently shown)
 let mapApplet = new MapApplet();
@@ -82,19 +61,42 @@ let droneVelocityApplet = new DroneVelocityApplet();
 let droneSoCApplet = new DroneSoCApplet();
 let droneRemDistApplet = new DroneRemDistApplet();
 
-let drones = {
-    'demo_drone': new Drone('demo_drone'),
-    //'demo_drone2': new Drone('demo_drone2'),
-    //'demo_drone3': new Drone('demo_drone3'),
-    //'demo_drone4': new Drone('demo_drone4')
-}
-//drones['demo_drone2'].setDemoIndex(20);
-//drones['demo_drone3'].setDemoIndex(40);
-//drones['demo_drone4'].setDemoIndex(60);
+
+let drones = {};
+let intersections = {};
+let corridors = {};
+
+// DEMO ONLY
+drones['demo_drone'] = new Drone('demo_drone');
+
+intersections['EDMR-Landeplatz'] = new Intersection('EDMR-Landeplatz');
+intersections['int_1'] = new Intersection('int_1');
+intersections['int_2'] = new Intersection('int_2');
+intersections['int_3'] = new Intersection('int_3');
+intersections['int_4'] = new Intersection('int_4');
+intersections['int_5'] = new Intersection('int_5');
+intersections['int_6'] = new Intersection('int_6');
+intersections['int_7'] = new Intersection('int_7');
+
+
+corridors['cor_1'] = new Corridor('cor_1');
+corridors['cor_2'] = new Corridor('cor_2');
+corridors['cor_3'] = new Corridor('cor_3');
+corridors['cor_4'] = new Corridor('cor_4');
+corridors['cor_5'] = new Corridor('cor_5');
+corridors['cor_6'] = new Corridor('cor_6');
+corridors['cor_7'] = new Corridor('cor_7');
+corridors['cor_8'] = new Corridor('cor_8');
+corridors['cor_9'] = new Corridor('cor_9');
+corridors['cor_10'] = new Corridor('cor_10');
+corridors['cor_11'] = new Corridor('cor_11');
+corridors['cor_12'] = new Corridor('cor_12');
+
 
 function updateDrones() {
-    // Update drone list
-    // Add / remove drones
+    // TODO: Update drone list
+    // TODO: Add / remove drones
+
     // Update each drone
     if (useLiveData) {
         for (drone_id in drones) {
@@ -107,8 +109,21 @@ function updateDrones() {
     }
 }
 
+function updateInfrastructure() {
+    // TODO: Update infrastructure list
+    // TODO: Add / remove intersections / corridors
+
+    for(intersectionId in intersections) {
+        intersections[intersectionId].updateValues();
+    }
+    for(corridorId in corridors) {
+        corridors[corridorId].updateValues();
+    }
+}
+
+
 function updateApplets() {
-    mapApplet.update(drones);
+    mapApplet.update(drones, intersections, corridors);
     droneAltitudeApplet.update(drones);
     droneVelocityApplet.update(drones);
     droneSoCApplet.update(drones);
@@ -125,6 +140,7 @@ window.onload = () => {
 
     setInterval(() => {
         updateDrones();
+        updateInfrastructure(); // TODO: reduce update rate
         updateApplets();
     }, 1000);
 }

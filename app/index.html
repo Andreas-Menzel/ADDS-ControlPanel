@@ -20,7 +20,7 @@
         <div id="mapApplet" class="appletWrapper">
             <div class="appletControlPanel">
                 <button class="btnAutoAdjust standardButton">Disable auto-adjust</button>
-                <button class="btnShowFlightPath standardButton">Show flight path</button>
+                <button class="btnShowInfrastructure standardButton">Show infrastructure</button>
             </div>
             <div class="mapWrapper">
                 <div id="mapApplet_map"></div>
@@ -46,12 +46,6 @@
             <span class="appletName">DroneVelocityApplet</span>
         </div>
 
-        <!--<div id="controlPanelApplet" class="appletWrapper">
-            <p><span id="secondsPassed">?</span> / <span id="maxSeconds">?</span> seconds passed.</p>
-            <button class="standardButton" onclick="back10secs()">back 10 seconds</button>
-            <button class="standardButton" onclick="forward10secs()">forward 10 seconds</button>
-        </div>-->
-
         <div id="droneSoCApplet" class="appletWrapper">
             <div class="chartWrapper">
                 <canvas id="droneSoCApplet_chart" class="appletChart"></canvas>
@@ -68,13 +62,15 @@
     </div>
 
 
-    <script src="./js/Drone.js"></script>
+    <script src="./js/informationHolders/Drone.js"></script>
+    <script src="./js/informationHolders/Intersection.js"></script>
+    <script src="./js/informationHolders/Corridor.js"></script>
 
-    <script src="./js/MapApplet.js"></script>
-    <script src="./js/DroneAltitudeApplet.js"></script>
-    <script src="./js/DroneVelocityApplet.js"></script>
-    <script src="./js/DroneSoCApplet.js"></script>
-    <script src="./js/DroneRemDistApplet.js"></script>
+    <script src="./js/applets/MapApplet.js"></script>
+    <script src="./js/applets/DroneAltitudeApplet.js"></script>
+    <script src="./js/applets/DroneVelocityApplet.js"></script>
+    <script src="./js/applets/DroneSoCApplet.js"></script>
+    <script src="./js/applets/DroneRemDistApplet.js"></script>
 
     <script src="./demo_data/data_sanitized.js"></script>
     <script src="./js/main.js"></script>
