@@ -124,6 +124,10 @@ class MapApplet {
             }
 
             if(this.#showInfrastructure) {
+                // TODO: Always update if one or more corridors or intersections
+                // were not fully loaded
+                this.#showInfrastructureChanged = true;
+
                 if (!this.#showInfrastructureChanged && Object.keys(this.#intersections).join(',') === Object.keys(intersections).join(',')) {
                     // Same intersections(, different values)
                     for (let i = 0; i < Object.keys(this.#intersections).length; ++i) {
@@ -160,7 +164,7 @@ class MapApplet {
     
                     this.#corridorVectors = [];
     
-                    for(corridorId in this.#corridors) {
+                    for(const corridorId in this.#corridors) {
                         const corridor = this.#corridors[corridorId];
 
                         let intersectionA = intersections[corridor.getIntersectionAId()];
@@ -172,6 +176,8 @@ class MapApplet {
                             if(intersectionA.getDataValid() && intersectionB.getDataValid()) {
                                 this.#corridorVectors.push(this.#createAndAddVectorLineString(this.#map, intersectionA.getGpsLat(), intersectionA.getGpsLon(), intersectionB.getGpsLat(), intersectionB.getGpsLon()));
                             }
+                        } else {
+                            
                         }
                     }
                 }

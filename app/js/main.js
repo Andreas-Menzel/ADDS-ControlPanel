@@ -68,29 +68,88 @@ let corridors = {};
 
 // DEMO ONLY
 drones['demo_drone'] = new Drone('demo_drone');
+//
+//intersections['EDMR-Landeplatz'] = new Intersection('EDMR-Landeplatz');
+//intersections['int_1'] = new Intersection('int_1');
+//intersections['int_2'] = new Intersection('int_2');
+//intersections['int_3'] = new Intersection('int_3');
+//intersections['int_4'] = new Intersection('int_4');
+//intersections['int_5'] = new Intersection('int_5');
+//intersections['int_6'] = new Intersection('int_6');
+//intersections['int_71'] = new Intersection('int_71');
+//
+//
+//corridors['cor_1'] = new Corridor('cor_1');
+//corridors['cor_2'] = new Corridor('cor_2');
+//corridors['cor_3'] = new Corridor('cor_3');
+//corridors['cor_4'] = new Corridor('cor_4');
+//corridors['cor_5'] = new Corridor('cor_5');
+//corridors['cor_6'] = new Corridor('cor_6');
+//corridors['cor_7'] = new Corridor('cor_7');
+//corridors['cor_8'] = new Corridor('cor_8');
+//corridors['cor_9'] = new Corridor('cor_9');
+//corridors['cor_10'] = new Corridor('cor_10');
+//corridors['cor_11'] = new Corridor('cor_11');
+//corridors['cor_12'] = new Corridor('cor_12');
 
-intersections['EDMR-Landeplatz'] = new Intersection('EDMR-Landeplatz');
-intersections['int_1'] = new Intersection('int_1');
-intersections['int_2'] = new Intersection('int_2');
-intersections['int_3'] = new Intersection('int_3');
-intersections['int_4'] = new Intersection('int_4');
-intersections['int_5'] = new Intersection('int_5');
-intersections['int_6'] = new Intersection('int_6');
-intersections['int_7'] = new Intersection('int_7');
 
+function updateDroneList() {
 
-corridors['cor_1'] = new Corridor('cor_1');
-corridors['cor_2'] = new Corridor('cor_2');
-corridors['cor_3'] = new Corridor('cor_3');
-corridors['cor_4'] = new Corridor('cor_4');
-corridors['cor_5'] = new Corridor('cor_5');
-corridors['cor_6'] = new Corridor('cor_6');
-corridors['cor_7'] = new Corridor('cor_7');
-corridors['cor_8'] = new Corridor('cor_8');
-corridors['cor_9'] = new Corridor('cor_9');
-corridors['cor_10'] = new Corridor('cor_10');
-corridors['cor_11'] = new Corridor('cor_11');
-corridors['cor_12'] = new Corridor('cor_12');
+}
+
+function updateIntersectionList() {
+    const payload = '{"intersection_id": "%","data_type": "intersection_list"}';
+        const handleResponse = () => {
+            const response = JSON.parse(xhttp.responseText);
+            if(response['executed']) {
+                const intersectionIds = response['response_data']['intersection_ids'];
+                const myIntersectionIds = Object.keys(intersections);
+
+                const intersectionsToAdd = intersectionIds.filter(x => !myIntersectionIds.includes(x));
+                const intersectionsToRemove = myIntersectionIds.filter(x => !intersectionIds.includes(x));
+
+                for(newInt in intersectionsToAdd) {
+                    const newIntId = intersectionsToAdd[newInt];
+                    intersections[newIntId] = new Intersection(newIntId);
+                }
+                for(remInt in intersectionsToRemove) {
+                    const remIntId = intersectionsToRemove[remInt];
+                    delete intersections[remIntId];
+                }
+            }
+        };
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = () => { handleResponse() };
+        xhttp.open('GET', trafficControlUrl + 'ask/intersection_list?payload=' + payload, true);
+        xhttp.send();
+}
+
+function updateCorridorList() {
+    const payload = '{"corridor_id": "%","data_type": "corridor_list"}';
+        const handleResponse = () => {
+            const response = JSON.parse(xhttp.responseText);
+            if(response['executed']) {
+                const corridorIds = response['response_data']['corridor_ids'];
+                const myCorridorIds = Object.keys(corridors);
+
+                const corridorsToAdd = corridorIds.filter(x => !myCorridorIds.includes(x));
+                const corridorsToRemove = myCorridorIds.filter(x => !corridorIds.includes(x));
+
+                for(newCor in corridorsToAdd) {
+                    const newCorId = corridorsToAdd[newCor];
+                    corridors[newCorId] = new Corridor(newCorId);
+                }
+                for(remCor in corridorsToRemove) {
+                    const remCorId = corridorsToRemove[remCor];
+                    delete corridors[remCorId];
+                }
+            }
+        };
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = () => { handleResponse() };
+        xhttp.open('GET', trafficControlUrl + 'ask/corridor_list?payload=' + payload, true);
+        xhttp.send();
+}
 
 
 function updateDrones() {
@@ -138,9 +197,22 @@ window.onload = () => {
     droneSoCApplet.init();
     droneRemDistApplet.init();
 
+    updateDrones();
+    updateApplets();
     setInterval(() => {
         updateDrones();
-        updateInfrastructure(); // TODO: reduce update rate
         updateApplets();
     }, 1000);
+
+    updateDroneList();
+    updateIntersectionList();
+    updateCorridorList();
+    updateInfrastructure();
+    setInterval(() => {
+        updateDroneList();
+        updateIntersectionList();
+        updateCorridorList();
+
+        updateInfrastructure();
+    }, 5000);
 }
