@@ -36,7 +36,7 @@ class Corridor {
         };
         const xhttp = new XMLHttpRequest();
         xhttp.onload = () => { handleResponse() };
-        xhttp.open('GET', trafficControlUrl + 'ask/corridor_location?payload=' + payload, true);
+        xhttp.open('GET', trafficControlUrl + 'ask/corridor_location?payload=' + payload + '&rand=' + new Date().getTime(), true);
         xhttp.send();
     }
 

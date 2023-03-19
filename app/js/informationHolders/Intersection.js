@@ -44,7 +44,7 @@ class Intersection {
         };
         const xhttp = new XMLHttpRequest();
         xhttp.onload = () => { handleResponse() };
-        xhttp.open('GET', trafficControlUrl + 'ask/intersection_location?payload=' + payload, true);
+        xhttp.open('GET', trafficControlUrl + 'ask/intersection_location?payload=' + payload + '&rand=' + new Date().getTime(), true);
         xhttp.send();
     }
 
