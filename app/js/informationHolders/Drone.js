@@ -206,12 +206,12 @@ class Drone {
 
     updateFlightDataValues(response) {
         this.#takeoffTime = response['response_data']['takeoff_time'];
-        this.#takeoffGpsValid = response['response_data']['takeoff_gps_valid'];
+        this.#takeoffGpsValid = toBoolean(response['response_data']['takeoff_gps_valid']);
         this.#takeoffGpsLat = response['response_data']['takeoff_gps_lat'];
         this.#takeoffGpsLon = response['response_data']['takeoff_gps_lon'];
 
         this.#landingTime = response['response_data']['landing_time'];
-        this.#landingGpsValid = response['response_data']['landing_gps_valid'];
+        this.#landingGpsValid = toBoolean(response['response_data']['landing_gps_valid']);
         this.#landingGpsLat = response['response_data']['landing_gps_lat'];
         this.#landingGpsLon = response['response_data']['landing_gps_lon'];
 
@@ -256,10 +256,10 @@ class Drone {
         this.#gpsValid = gpsValid;
     }
     getGpsLat() {
-        return this.#gpsLon;
+        return this.#gpsLat;
     }
     getGpsLon() {
-        return this.#gpsLat;
+        return this.#gpsLon;
     }
 
     getAltitude() {
@@ -309,10 +309,10 @@ class Drone {
         return this.#takeoffGpsValid;
     }
     getTakeoffGpsLat() {
-        return this.#takeoffGpsLon;
+        return this.#takeoffGpsLat;
     }
     getTakeoffGpsLon() {
-        return this.#takeoffGpsLat;
+        return this.#takeoffGpsLon;
     }
 
     getLandingTime() {
@@ -322,10 +322,10 @@ class Drone {
         return this.#landingGpsValid;
     }
     getLandingGpsLat() {
-        return this.#landingGpsLon;
+        return this.#landingGpsLat;
     }
     getLandingGpsLon() {
-        return this.#landingGpsLat;
+        return this.#landingGpsLon;
     }
 
     getOperationModes() {

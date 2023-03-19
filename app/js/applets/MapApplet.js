@@ -150,10 +150,11 @@ class MapApplet {
         // index >= 0 : specify index
         const addIntersectionToMap = (intersection, index) => {
             if (intersection.getDataValid()) {
+                const vector = this.#createAndAddVectorPoint(this.#map, intersection.getGpsLat(), intersection.getGpsLon(), intersection.getImageSource(), intersection.getImageScale());
                 if (index >= 0) {
-                    this.#intersectionVectors[index] = this.#createAndAddVectorPoint(this.#map, intersection.getGpsLon(), intersection.getGpsLat(), intersection.getImageSource(), intersection.getImageScale());
+                    this.#intersectionVectors[index] = vector;
                 } else {
-                    this.#intersectionVectors.push(this.#createAndAddVectorPoint(this.#map, intersection.getGpsLon(), intersection.getGpsLat(), intersection.getImageSource(), intersection.getImageScale()));
+                    this.#intersectionVectors.push(vector);
                 }
             } else {
                 // The data was not fetched yet.
@@ -172,7 +173,7 @@ class MapApplet {
                 let intersection = this.#intersections[intersectionId];
 
                 if (this.#intersectionVectors[i] != null) {
-                    this.#updateVectorPointCoordinates(this.#intersectionVectors[i], intersection.getGpsLon(), intersection.getGpsLat());
+                    this.#updateVectorPointCoordinates(this.#intersectionVectors[i], intersection.getGpsLat(), intersection.getGpsLon());
                 } else {
                     // The data may have been fetched now. Try to add the
                     // intersection to the map.
@@ -270,7 +271,7 @@ class MapApplet {
             source: new ol.source.Vector({
                 features: [
                     new ol.Feature({
-                        geometry: new ol.geom.Point(ol.proj.fromLonLat([lat, lon]))
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
                     })
                 ]
             }),
@@ -294,7 +295,7 @@ class MapApplet {
         let newSource = new ol.source.Vector({
             features: [
                 new ol.Feature({
-                    geometry: new ol.geom.Point(ol.proj.fromLonLat([lat, lon]))
+                    geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
                 })
             ]
         });
@@ -460,7 +461,7 @@ class MapApplet {
 
 function updateMapCenterAndZoom(map, lat, lon, zoom) {
     let newView = new ol.View({
-        center: ol.proj.fromLonLat([lat, lon]),
+        center: ol.proj.fromLonLat([lon, lat]),
         zoom: zoom
     })
     map.setView(newView);
