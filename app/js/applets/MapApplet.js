@@ -14,7 +14,6 @@ class MapApplet {
     #intersections = {};
     #intersectionVectors = [];
 
-    // TODO corridors
     #corridors = {};
     #corridorVectors = [];
 
@@ -369,42 +368,80 @@ class MapApplet {
         let maxX = null;
         let maxY = null;
 
-        for (const droneId in drones) {
-            const drone = drones[droneId];
+        for (const droneId in this.#drones) {
+            const drone = this.#drones[droneId];
 
-            const droneCoordinates = ol.proj.fromLonLat([drone.getGpsLat(), drone.getGpsLon()]);
+            // Make sure all drones are in focus.
+            if (drone.getGpsValid()) {
+                const droneCoordinates = ol.proj.fromLonLat([drone.getGpsLon(), drone.getGpsLat()]);
 
-            if (minX == null || droneCoordinates[0] < minX) minX = droneCoordinates[0];
-            if (maxX == null || droneCoordinates[0] > maxX) maxX = droneCoordinates[0];
-            if (minY == null || droneCoordinates[1] < minY) minY = droneCoordinates[1];
-            if (maxY == null || droneCoordinates[1] > maxY) maxY = droneCoordinates[1];
+                if (minX == null || droneCoordinates[0] < minX) minX = droneCoordinates[0];
+                if (maxX == null || droneCoordinates[0] > maxX) maxX = droneCoordinates[0];
+                if (minY == null || droneCoordinates[1] < minY) minY = droneCoordinates[1];
+                if (maxY == null || droneCoordinates[1] > maxY) maxY = droneCoordinates[1];
+            }
+
+            // Make sure all takeoff sites are in focus.
+            if (drone.getTakeoffGpsValid()) {
+                const takeoffCoordinates = ol.proj.fromLonLat([drone.getTakeoffGpsLon(), drone.getTakeoffGpsLat()]);
+
+                if (minX == null || takeoffCoordinates[0] < minX) minX = takeoffCoordinates[0];
+                if (maxX == null || takeoffCoordinates[0] > maxX) maxX = takeoffCoordinates[0];
+                if (minY == null || takeoffCoordinates[1] < minY) minY = takeoffCoordinates[1];
+                if (maxY == null || takeoffCoordinates[1] > maxY) maxY = takeoffCoordinates[1];
+            }
+
+            // Make sure all landing sites are in focus.
+            if (drone.getLandingGpsValid()) {
+                const landingCoordinates = ol.proj.fromLonLat([drone.getLandingGpsLon(), drone.getLandingGpsLat()]);
+
+                if (minX == null || landingCoordinates[0] < minX) minX = landingCoordinates[0];
+                if (maxX == null || landingCoordinates[0] > maxX) maxX = landingCoordinates[0];
+                if (minY == null || landingCoordinates[1] < minY) minY = landingCoordinates[1];
+                if (maxY == null || landingCoordinates[1] > maxY) maxY = landingCoordinates[1];
+            }
         }
 
+        // Make sure the infrastructure is in focus when it is shown.
+        if (this.#showInfrastructure) {
+            for (const intersectionId in this.#intersections) {
+                const intersection = intersections[intersectionId];
 
-        minX -= this.#autoAdjustPadding;
-        minY -= this.#autoAdjustPadding;
-        maxX += this.#autoAdjustPadding;
-        maxY += this.#autoAdjustPadding;
+                const intersectionCoordinates = ol.proj.fromLonLat([intersection.getGpsLon(), intersection.getGpsLat()]);
 
-        // Dampen the auto-adjust
-        minX = Math.round(minX / this.#autoAdjustDampener) * this.#autoAdjustDampener;
-        minY = Math.round(minY / this.#autoAdjustDampener) * this.#autoAdjustDampener;
-        maxX = Math.round(maxX / this.#autoAdjustDampener) * this.#autoAdjustDampener;
-        maxY = Math.round(maxY / this.#autoAdjustDampener) * this.#autoAdjustDampener;
-
-        const extent = [minX, minY, maxX, maxY];
-
-        const center = ol.extent.getCenter(extent);
-        const resolution = this.#map.getView().getResolutionForExtent(extent);
-        const zoom = this.#map.getView().getZoomForResolution(resolution);
-
-        this.#map.getView().animate(
-            {
-                duration: 900,
-                center: center,
-                zoom: zoom
+                if (minX == null || intersectionCoordinates[0] < minX) minX = intersectionCoordinates[0];
+                if (maxX == null || intersectionCoordinates[0] > maxX) maxX = intersectionCoordinates[0];
+                if (minY == null || intersectionCoordinates[1] < minY) minY = intersectionCoordinates[1];
+                if (maxY == null || intersectionCoordinates[1] > maxY) maxY = intersectionCoordinates[1];
             }
-        );
+        }
+
+        if (minX != null && maxX != null && minY != null && maxY != null) {
+            minX -= this.#autoAdjustPadding;
+            minY -= this.#autoAdjustPadding;
+            maxX += this.#autoAdjustPadding;
+            maxY += this.#autoAdjustPadding;
+
+            // Dampen the auto-adjust
+            minX = Math.round(minX / this.#autoAdjustDampener) * this.#autoAdjustDampener;
+            minY = Math.round(minY / this.#autoAdjustDampener) * this.#autoAdjustDampener;
+            maxX = Math.round(maxX / this.#autoAdjustDampener) * this.#autoAdjustDampener;
+            maxY = Math.round(maxY / this.#autoAdjustDampener) * this.#autoAdjustDampener;
+
+            const extent = [minX, minY, maxX, maxY];
+
+            const center = ol.extent.getCenter(extent);
+            const resolution = this.#map.getView().getResolutionForExtent(extent);
+            const zoom = this.#map.getView().getZoomForResolution(resolution);
+
+            this.#map.getView().animate(
+                {
+                    duration: 900,
+                    center: center,
+                    zoom: zoom
+                }
+            );
+        }
     }
 
 
