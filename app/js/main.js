@@ -23,20 +23,20 @@ function setAppletWrapperHeightsWithControlPanel() {
 
 
 function toBoolean(stringValue) {
-    if(typeof(stringValue) === 'string') {
+    if (typeof (stringValue) === 'string') {
         switch (stringValue?.toLowerCase()?.trim()) {
             case "true":
             case "yes":
             case "1":
                 return true;
-    
+
             case "false":
             case "no":
             case "0":
             case null:
             case undefined:
                 return false;
-    
+
             default:
                 return JSON.parse(stringValue);
         }
@@ -99,56 +99,67 @@ function updateDroneList() {
 
 function updateIntersectionList() {
     const payload = '{"intersection_id": "%","data_type": "intersection_list"}';
-        const handleResponse = () => {
-            const response = JSON.parse(xhttp.responseText);
-            if(response['executed']) {
-                const intersectionIds = response['response_data']['intersection_ids'];
-                const myIntersectionIds = Object.keys(intersections);
+    const handleResponse = () => {
+        const response = JSON.parse(xhttp.responseText);
+        if (response['executed']) {
+            const intersectionIds = Object.keys(response['response_data']);
+            const myIntersectionIds = Object.keys(intersections);
 
-                const intersectionsToAdd = intersectionIds.filter(x => !myIntersectionIds.includes(x));
-                const intersectionsToRemove = myIntersectionIds.filter(x => !intersectionIds.includes(x));
+            const intersectionsToAdd = intersectionIds.filter(x => !myIntersectionIds.includes(x));
+            const intersectionsToRemove = myIntersectionIds.filter(x => !intersectionIds.includes(x));
 
-                for(newInt in intersectionsToAdd) {
-                    const newIntId = intersectionsToAdd[newInt];
-                    intersections[newIntId] = new Intersection(newIntId);
-                }
-                for(remInt in intersectionsToRemove) {
-                    const remIntId = intersectionsToRemove[remInt];
-                    delete intersections[remIntId];
-                }
+            for (newIntId of intersectionsToAdd) {
+                intersections[newIntId] = new Intersection(newIntId);
             }
-        };
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = () => { handleResponse() };
-        xhttp.open('GET', trafficControlUrl + 'ask/intersection_list?payload=' + payload, true);
-        xhttp.send();
+            for (remIntId of intersectionsToRemove) {
+                delete intersections[remIntId];
+            }
+
+            for (intId of intersectionIds) {
+                const gpsLat = response['response_data'][intId]['gps_lat'];
+                const gpsLon = response['response_data'][intId]['gps_lon'];
+                const altitude = response['response_data'][intId]['altitude'];
+
+                intersections[intId].setValues(gpsLat, gpsLon, altitude);
+            }
+        }
+    };
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = () => { handleResponse() };
+    xhttp.open('GET', trafficControlUrl + 'ask/intersection_list?payload=' + payload, true);
+    xhttp.send();
 }
 
 function updateCorridorList() {
     const payload = '{"corridor_id": "%","data_type": "corridor_list"}';
-        const handleResponse = () => {
-            const response = JSON.parse(xhttp.responseText);
-            if(response['executed']) {
-                const corridorIds = response['response_data']['corridor_ids'];
-                const myCorridorIds = Object.keys(corridors);
+    const handleResponse = () => {
+        const response = JSON.parse(xhttp.responseText);
+        if (response['executed']) {
+            const corridorIds = Object.keys(response['response_data']);
+            const myCorridorIds = Object.keys(corridors);
 
-                const corridorsToAdd = corridorIds.filter(x => !myCorridorIds.includes(x));
-                const corridorsToRemove = myCorridorIds.filter(x => !corridorIds.includes(x));
+            const corridorsToAdd = corridorIds.filter(x => !myCorridorIds.includes(x));
+            const corridorsToRemove = myCorridorIds.filter(x => !corridorIds.includes(x));
 
-                for(newCor in corridorsToAdd) {
-                    const newCorId = corridorsToAdd[newCor];
-                    corridors[newCorId] = new Corridor(newCorId);
-                }
-                for(remCor in corridorsToRemove) {
-                    const remCorId = corridorsToRemove[remCor];
-                    delete corridors[remCorId];
-                }
+            for (newCorId of corridorsToAdd) {
+                corridors[newCorId] = new Corridor(newCorId);
             }
-        };
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = () => { handleResponse() };
-        xhttp.open('GET', trafficControlUrl + 'ask/corridor_list?payload=' + payload, true);
-        xhttp.send();
+            for (remCorId of corridorsToRemove) {
+                delete corridors[remCorId];
+            }
+
+            for (corId of corridorIds) {
+                const intersectionAId = response['response_data'][corId]['intersection_a'];
+                const intersectionBId = response['response_data'][corId]['intersection_b'];
+
+                corridors[corId].setValues(intersectionAId, intersectionBId);
+            }
+        }
+    };
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = () => { handleResponse() };
+    xhttp.open('GET', trafficControlUrl + 'ask/corridor_list?payload=' + payload, true);
+    xhttp.send();
 }
 
 
@@ -172,10 +183,10 @@ function updateInfrastructure() {
     // TODO: Update infrastructure list
     // TODO: Add / remove intersections / corridors
 
-    for(intersectionId in intersections) {
+    for (intersectionId in intersections) {
         intersections[intersectionId].updateValues();
     }
-    for(corridorId in corridors) {
+    for (corridorId in corridors) {
         corridors[corridorId].updateValues();
     }
 }

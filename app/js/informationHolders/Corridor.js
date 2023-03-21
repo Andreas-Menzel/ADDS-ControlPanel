@@ -22,22 +22,11 @@ class Corridor {
     }
 
 
-    updateValues() {
-        const payload = '{"corridor_id": "' + this.#id + '","data_type": "corridor_location"}';
-        const handleResponse = () => {
-            const response = JSON.parse(xhttp.responseText);
+    setValues(intersectionAId, intersectionBId) {
+        this.#dataValid = true;
 
-            if(response['executed']) {
-                this.#dataValid = true;
-
-                this.#intersectionAId = response['response_data']['intersection_a'];
-                this.#intersectionBId = response['response_data']['intersection_b'];
-            }
-        };
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = () => { handleResponse() };
-        xhttp.open('GET', trafficControlUrl + 'ask/corridor_location?payload=' + payload + '&rand=' + new Date().getTime(), true);
-        xhttp.send();
+        this.#intersectionAId = intersectionAId;
+        this.#intersectionBId = intersectionBId;
     }
 
 

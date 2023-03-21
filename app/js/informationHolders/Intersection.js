@@ -29,23 +29,13 @@ class Intersection {
     }
 
 
-    updateValues() {
-        const payload = '{"intersection_id": "' + this.#id + '","data_type": "intersection_location"}';
-        const handleResponse = () => {
-            const response = JSON.parse(xhttp.responseText);
-            if(response['executed']) {
-                this.#dataValid = true;
+    setValues(gpsLat, gpsLon, altitude) {
+        this.#dataValid = true;
 
-                this.#gpsLat = response['response_data']['gps_lat'];
-                this.#gpsLon = response['response_data']['gps_lon'];
-    
-                this.#altitude = response['response_data']['altitude'];
-            }
-        };
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = () => { handleResponse() };
-        xhttp.open('GET', trafficControlUrl + 'ask/intersection_location?payload=' + payload + '&rand=' + new Date().getTime(), true);
-        xhttp.send();
+        this.#gpsLat = gpsLat;
+        this.#gpsLon = gpsLon;
+
+        this.#altitude = altitude;
     }
 
 
