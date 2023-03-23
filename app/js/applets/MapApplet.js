@@ -19,11 +19,11 @@ class MapApplet {
 
     #preferredZoomLevel = 18;
 
-    #autoAdjustEnabled = false;
-    #autoAdjustPadding = 50;
+    #autoAdjustEnabled = true;
+    #autoAdjustPadding = 40;
     #autoAdjustDampener = 20; // set to 1 to disable
 
-    #showInfrastructure = false;
+    #showInfrastructure = true;
     #showInfrastructureChanged = false;
 
 

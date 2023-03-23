@@ -28,6 +28,96 @@
             <span class="appletName">MapApplet</span>
         </div>
 
+        <div id="dataValidationApplet" class="appletWrapper">
+            <div class="appletControlPanel">
+                <div class="controlPanelLine">
+                    <button class="btn_dataValidationApplet_showAircraftLocation standardButton buttonActive">Aircraft Location</button>
+                    <button class="btn_dataValidationApplet_showAircraftPower standardButton">Aircraft Power</button>
+                    <button class="btn_dataValidationApplet_showFlightData standardButton">Flight data</button>
+                </div>
+                <div class="controlPanelLine" style="margin-top: 0.5rem;">
+                    <select class="dataValidationApplet_droneIdSelector"></select>
+                    <select class="dataValidationApplet_datasetIdRangeSelector"></select>
+                </div>
+            </div>
+            <div class="tableWrapper">
+                <div class="dataValidationApplet_aircraftLocationTableWrapper" style="display:none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>data integrity</th>
+                                <th>transaction_uuid</th>
+                                <th>Dataset ID (Traffic Control)</th>
+                                <th>drone_id</th>
+                                <th>gps_signal_level</th>
+                                <th>gps_satellites_connected</th>
+                                <th>gps_valid</th>
+                                <th>gps_lat</th>
+                                <th>gps_lon</th>
+                                <th>altitude</th>
+                                <th>velocity_x</th>
+                                <th>velocity_y</th>
+                                <th>velocity_z</th>
+                                <th>pitch</th>
+                                <th>yaw</th>
+                                <th>roll</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dataValidationApplet_aircraftPowerTableWrapper" style="display:none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>verified</th>
+                                <th>Dataset ID (Traffic Control)</th>
+                                <th>transaction_uuid</th>
+                                <th>drone_id</th>
+                                <th>battery_remaining</th>
+                                <th>battery_remaining_percent</th>
+                                <th>remaining_flight_time</th>
+                                <th>remaining_flight_radius</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dataValidationApplet_flightDataTableWrapper" style="display:none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>verified</th>
+                                <th>Dataset ID (Traffic Control)</th>
+                                <th>transaction_uuid</th>
+                                <th>drone_id</th>
+                                <th>takeoff_time</th>
+                                <th>takeoff_gps_valid</th>
+                                <th>takeoff_gps_lat</th>
+                                <th>takeoff_gps_lon</th>
+                                <th>landing_time</th>
+                                <th>landing_gps_valid</th>
+                                <th>landing_gps_lat</th>
+                                <th>landing_gps_lon</th>
+                                <th>operation_modes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <span class="appletName">DataValidationApplet</span>
+        </div>
+
         <div id="droneAltitudeApplet" class="appletWrapper">
             <div class="chartWrapper">
                 <canvas id="droneAltitudeApplet_chart" class="appletChart"></canvas>
@@ -67,6 +157,7 @@
     <script src="./js/informationHolders/Corridor.js"></script>
 
     <script src="./js/applets/MapApplet.js"></script>
+    <script src="./js/applets/DataValidationApplet.js"></script>
     <script src="./js/applets/DroneAltitudeApplet.js"></script>
     <script src="./js/applets/DroneVelocityApplet.js"></script>
     <script src="./js/applets/DroneSoCApplet.js"></script>

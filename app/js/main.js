@@ -8,6 +8,7 @@ function setAppletWrapperHeightsWithControlPanel() {
         let appletControlPanel = appletWrapper.getElementsByClassName('appletControlPanel');
         let chartWrapper = appletWrapper.getElementsByClassName('chartWrapper');
         let mapWrapper = appletWrapper.getElementsByClassName('mapWrapper');
+        let tableWrapper = appletWrapper.getElementsByClassName('tableWrapper');
 
         if (appletControlPanel.length == 1 && chartWrapper.length == 1) {
             const appletControlPanelHeight = appletControlPanel[0].offsetHeight;
@@ -16,6 +17,10 @@ function setAppletWrapperHeightsWithControlPanel() {
         if (appletControlPanel.length == 1 && mapWrapper.length == 1) {
             const appletControlPanelHeight = appletControlPanel[0].offsetHeight;
             mapWrapper[0].style.height = 'calc(100% - ' + appletControlPanelHeight + 'px)';
+        }
+        if (appletControlPanel.length == 1 && tableWrapper.length == 1) {
+            const appletControlPanelHeight = appletControlPanel[0].offsetHeight;
+            tableWrapper[0].style.height = 'calc(100% - ' + appletControlPanelHeight + 'px)';
         }
     }
 }
@@ -48,6 +53,7 @@ function toBoolean(stringValue) {
 
 const useLiveData = true;
 const trafficControlUrl = 'http://adds-demo.an-men.de/';
+const cChainLinkUrl = 'http://adds-demo.an-men.de:8080/';
 
 let timeOffset = 0;
 
@@ -56,6 +62,7 @@ let timeOffset = 0;
 
 // Initialize ALL applets (even though they may not be currently shown)
 let mapApplet = new MapApplet();
+let dataValidationApplet = new DataValidationApplet();
 let droneAltitudeApplet = new DroneAltitudeApplet();
 let droneVelocityApplet = new DroneVelocityApplet();
 let droneSoCApplet = new DroneSoCApplet();
@@ -68,29 +75,6 @@ let corridors = {};
 
 // DEMO ONLY
 drones['demo_drone'] = new Drone('demo_drone');
-//
-//intersections['EDMR-Landeplatz'] = new Intersection('EDMR-Landeplatz');
-//intersections['int_1'] = new Intersection('int_1');
-//intersections['int_2'] = new Intersection('int_2');
-//intersections['int_3'] = new Intersection('int_3');
-//intersections['int_4'] = new Intersection('int_4');
-//intersections['int_5'] = new Intersection('int_5');
-//intersections['int_6'] = new Intersection('int_6');
-//intersections['int_71'] = new Intersection('int_71');
-//
-//
-//corridors['cor_1'] = new Corridor('cor_1');
-//corridors['cor_2'] = new Corridor('cor_2');
-//corridors['cor_3'] = new Corridor('cor_3');
-//corridors['cor_4'] = new Corridor('cor_4');
-//corridors['cor_5'] = new Corridor('cor_5');
-//corridors['cor_6'] = new Corridor('cor_6');
-//corridors['cor_7'] = new Corridor('cor_7');
-//corridors['cor_8'] = new Corridor('cor_8');
-//corridors['cor_9'] = new Corridor('cor_9');
-//corridors['cor_10'] = new Corridor('cor_10');
-//corridors['cor_11'] = new Corridor('cor_11');
-//corridors['cor_12'] = new Corridor('cor_12');
 
 
 function updateDroneList() {
@@ -98,7 +82,7 @@ function updateDroneList() {
 }
 
 function updateIntersectionList() {
-    const payload = '{"intersection_id": "%","data_type": "intersection_list"}';
+    const payload = '{"intersection_id": "aib-%","data_type": "intersection_list"}';
     const handleResponse = () => {
         const response = JSON.parse(xhttp.responseText);
         if (response['executed']) {
@@ -131,7 +115,7 @@ function updateIntersectionList() {
 }
 
 function updateCorridorList() {
-    const payload = '{"corridor_id": "%","data_type": "corridor_list"}';
+    const payload = '{"corridor_id": "aib-%","data_type": "corridor_list"}';
     const handleResponse = () => {
         const response = JSON.parse(xhttp.responseText);
         if (response['executed']) {
@@ -192,7 +176,7 @@ function updateInfrastructure() {
 }
 
 
-function updateApplets() {
+function updateApplets1s() {
     mapApplet.update(drones, intersections, corridors);
     droneAltitudeApplet.update(drones);
     droneVelocityApplet.update(drones);
@@ -200,27 +184,34 @@ function updateApplets() {
     droneRemDistApplet.update(drones);
 }
 
+function updateApplets5s() {
+    dataValidationApplet.update();
+}
+
 
 window.onload = () => {
     mapApplet.init();
+    dataValidationApplet.init();
     droneAltitudeApplet.init();
     droneVelocityApplet.init();
     droneSoCApplet.init();
     droneRemDistApplet.init();
 
     updateDrones();
-    updateApplets();
+    updateApplets1s();
     setInterval(() => {
         updateDrones();
-        updateApplets();
+        updateApplets1s();
     }, 1000);
 
     updateDroneList();
+    updateApplets5s();
     updateIntersectionList();
     updateCorridorList();
     updateInfrastructure();
     setInterval(() => {
         updateDroneList();
+        updateApplets5s();
         updateIntersectionList();
         updateCorridorList();
 
