@@ -38,19 +38,19 @@ class DataValidationApplet {
         btnShowAircraftLocation.addEventListener('click', () => {
             this.#dataVisible = 'AircraftLocation';
             this.#updateButtons();
-            this.#updateIdRangeSelector(true);
+            this.#updateIdRangeSelector(true, true);
             this.#updateDatasetTableVisibility();
         });
         btnShowAircraftPower.addEventListener('click', () => {
             this.#dataVisible = 'AircraftPower';
             this.#updateButtons();
-            this.#updateIdRangeSelector(true);
+            this.#updateIdRangeSelector(true, true);
             this.#updateDatasetTableVisibility();
         });
         btnShowFlightData.addEventListener('click', () => {
             this.#dataVisible = 'FlightData';
             this.#updateButtons();
-            this.#updateIdRangeSelector(true);
+            this.#updateIdRangeSelector(true, true);
             this.#updateDatasetTableVisibility();
         });
 
@@ -193,10 +193,11 @@ class DataValidationApplet {
                 idMax = response['response_data']['max_id'];
             }
 
+            let lastOptionSelected = false; // initialize with default value
             if (alwaysUpdate || ((response['executed'] && (idMin != idRangeSelectedMin || idMax != idRangeSelectedMax)))) {
                 const datasetIdRangeSelector = document.getElementsByClassName('dataValidationApplet_datasetIdRangeSelector')[0];
 
-                const lastOptionSelected = datasetIdRangeSelector.options.selectedIndex == datasetIdRangeSelector.options.length - 1;
+                lastOptionSelected = datasetIdRangeSelector.options.selectedIndex == datasetIdRangeSelector.options.length - 1;
 
                 if (this.#dataVisible == 'AircraftLocation') {
                     this.#aircraftLocationIdRangeSelectedMin = idMin;
@@ -242,9 +243,11 @@ class DataValidationApplet {
                 if (lastOptionSelected) {
                     this.#updateDatasetTableData();
                 }
-                if (alwaysUpdateDatasetTableData) {
-                    this.#updateDatasetTableData();
-                }
+            }
+
+            // !lastOptionSelected so that it doesn't get executed twice
+            if (!lastOptionSelected && alwaysUpdateDatasetTableData) {
+                this.#updateDatasetTableData();
             }
         };
         const xhttp = new XMLHttpRequest();
@@ -273,11 +276,10 @@ class DataValidationApplet {
         tableBody.innerHTML = '';
 
 
-        const datasetMinId = datasetIdRangeSelecor.options[this.#aircraftLocationIdRangeSelectionIndex].dataset.min_id;
-        const datasetMaxId = datasetIdRangeSelecor.options[this.#aircraftLocationIdRangeSelectionIndex].dataset.max_id;
+        const datasetMinId = parseInt(datasetIdRangeSelecor.options[this.#aircraftLocationIdRangeSelectionIndex].dataset.min_id);
+        const datasetMaxId = parseInt(datasetIdRangeSelecor.options[this.#aircraftLocationIdRangeSelectionIndex].dataset.max_id);
         for (let datasetId = datasetMinId; datasetId <= datasetMaxId; datasetId++) {
             let newDatasetEntry = document.createElement('tr');
-            newDatasetEntry.dataset.dataset_id = datasetId;
 
             let datasetVefified = document.createElement('td');
             datasetVefified.style.backgroundColor = 'orange';
@@ -349,10 +351,9 @@ class DataValidationApplet {
 
 
             // Update AircraftLocation data
-            const payloadAircraftLocation = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_location", "data": {"data_id": ' + datasetId + '}}';
+            const payloadTrafficControl = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_location", "data": {"data_id": ' + datasetId + '}}';
             const handleTrafficControlResponse = () => {
                 const response = JSON.parse(xhttpTrafficControl.responseText);
-                // response_data is null if no data has been recorded yet
                 if (response['executed'] && response['response_data'] != null) {
                     datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
                     //datasetTCId.innerText = datasetId;
@@ -477,13 +478,151 @@ class DataValidationApplet {
             };
             const xhttpTrafficControl = new XMLHttpRequest();
             xhttpTrafficControl.onload = () => { handleTrafficControlResponse() };
-            xhttpTrafficControl.open('GET', trafficControlUrl + 'ask/aircraft_location?payload=' + payloadAircraftLocation + '&rand=' + new Date().getTime(), true);
+            xhttpTrafficControl.open('GET', trafficControlUrl + 'ask/aircraft_location?payload=' + payloadTrafficControl + '&rand=' + new Date().getTime(), true);
             xhttpTrafficControl.send();
         }
     }
 
     #updateDatasetTableDataAircraftPower() {
+        const datasetIdRangeSelecor = document.getElementsByClassName('dataValidationApplet_datasetIdRangeSelector')[0];
 
+        const aircraftPowerTableWrapper = document.getElementsByClassName('dataValidationApplet_aircraftPowerTableWrapper')[0];
+
+        const tableBody = aircraftPowerTableWrapper.querySelectorAll('tbody')[0];
+        tableBody.innerHTML = '';
+
+
+        const datasetMinId = parseInt(datasetIdRangeSelecor.options[this.#aircraftPowerIdRangeSelectionIndex].dataset.min_id);
+        const datasetMaxId = parseInt(datasetIdRangeSelecor.options[this.#aircraftPowerIdRangeSelectionIndex].dataset.max_id);
+        for (let datasetId = datasetMinId; datasetId <= datasetMaxId; datasetId++) {
+            let newDatasetEntry = document.createElement('tr');
+
+            let datasetVefified = document.createElement('td');
+            datasetVefified.style.backgroundColor = 'orange';
+            datasetVefified.innerText = 'not checked yet';
+
+            let datasetTransactionUUID = document.createElement('td');
+            datasetTransactionUUID.innerText = 'transaction_uuid';
+
+            let datasetTCId = document.createElement('td');
+            datasetTCId.innerText = datasetId;
+
+            let datasetDroneId = document.createElement('td');
+            datasetDroneId.innerText = this.#droneId;
+
+            let datasetBatteryRemaining = document.createElement('td');
+            datasetBatteryRemaining.innerText = 'battery_remaining';
+
+            let datasetBatteryRemainingPercent = document.createElement('td');
+            datasetBatteryRemainingPercent.innerText = 'battery_remaining_percent';
+
+            let datasetRemainingFlightTime = document.createElement('td');
+            datasetRemainingFlightTime.innerText = 'remaining_flight_time';
+
+            let datasetRemainingFlightRadius = document.createElement('td');
+            datasetRemainingFlightRadius.innerText = 'remaining_flight_radius';
+
+            newDatasetEntry.appendChild(datasetVefified);
+            newDatasetEntry.appendChild(datasetTransactionUUID);
+            newDatasetEntry.appendChild(datasetTCId);
+            newDatasetEntry.appendChild(datasetDroneId);
+            newDatasetEntry.appendChild(datasetBatteryRemaining);
+            newDatasetEntry.appendChild(datasetBatteryRemainingPercent);
+            newDatasetEntry.appendChild(datasetRemainingFlightTime);
+            newDatasetEntry.appendChild(datasetRemainingFlightRadius);
+
+            tableBody.appendChild(newDatasetEntry);
+
+            const payloadTrafficControl = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_power", "data": {"data_id": ' + datasetId + '}}';
+            const handleTrafficControlResponse = () => {
+                const response = JSON.parse(xhttpTrafficControl.responseText);
+                if (response['executed'] && response['response_data'] != null) {
+                    datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
+                    //datasetTCId.innerText = datasetId;
+                    //datasetDroneId.innerText = response['response_data']['drone_id'];
+                    datasetBatteryRemaining.innerText = response['response_data']['battery_remaining'];
+                    datasetBatteryRemainingPercent.innerText = response['response_data']['battery_remaining_percent'];
+                    datasetRemainingFlightTime.innerText = response['response_data']['remaining_flight_time'];
+                    datasetRemainingFlightRadius.innerText = response['response_data']['remaining_flight_radius'];
+
+                    const transactionUUID = response['response_data']['transaction_uuid']
+                    if (transactionUUID != null && transactionUUID != '') {
+                        datasetVefified.innerText = 'checking...';
+
+                        const handleCChainLinkResponse = () => {
+                            const response = JSON.parse(xhttpCChainLink.response);
+
+                            if (response['executed']) {
+                                if (response['response_data'] != null) {
+                                    const responseTransactionUUID = response['response_data']['transaction_uuid'];
+                                    const responseTransactionData = JSON.parse(response['response_data']['transaction_data']);
+
+                                    let allDataValid = true;
+
+                                    if (datasetTransactionUUID.innerText != responseTransactionUUID) {
+                                        allDataValid = false;
+                                        datasetTransactionUUID.innerHTML = '<s>' + datasetTransactionUUID.innerText + '</s> / <b>' + responseTransactionUUID + '</b>';
+                                    }
+                                    if (datasetDroneId.innerText != responseTransactionData['drone_id']) {
+                                        allDataValid = false;
+                                        datasetDroneId.innerHTML = '<s>' + datasetDroneId.innerText + '</s> / <b>' + responseTransactionData['drone_id'] + '</b>';
+                                    }
+                                    if (datasetBatteryRemaining.innerText != responseTransactionData['data']['battery_remaining']) {
+                                        allDataValid = false;
+                                        datasetBatteryRemaining.innerHTML = '<s>' + datasetBatteryRemaining.innerText + '</s> / <b>' + responseTransactionData['data']['battery_remaining'] + '</b>';
+                                    }
+                                    if (datasetBatteryRemainingPercent.innerText != responseTransactionData['data']['battery_remaining_percent']) {
+                                        allDataValid = false;
+                                        datasetBatteryRemainingPercent.innerHTML = '<s>' + datasetBatteryRemainingPercent.innerText + '</s> / <b>' + responseTransactionData['data']['battery_remaining_percent'] + '</b>';
+                                    }
+                                    if (datasetRemainingFlightTime.innerText != responseTransactionData['data']['remaining_flight_time']) {
+                                        allDataValid = false;
+                                        datasetRemainingFlightTime.innerHTML = '<s>' + datasetRemainingFlightTime.innerText + '</s> / <b>' + responseTransactionData['data']['remaining_flight_time'] + '</b>';
+                                    }
+                                    if (datasetRemainingFlightRadius.innerText != responseTransactionData['data']['remaining_flight_radius']) {
+                                        allDataValid = false;
+                                        datasetRemainingFlightRadius.innerHTML = '<s>' + datasetRemainingFlightRadius.innerText + '</s> / <b>' + responseTransactionData['data']['remaining_flight_radius'] + '</b>';
+                                    }
+
+                                    if (allDataValid) {
+                                        datasetVefified.innerText = 'OK';
+                                        datasetVefified.style.backgroundColor = 'green';
+                                    } else {
+                                        datasetVefified.innerText = 'DATA MANIPULATED';
+                                        datasetVefified.style.backgroundColor = 'red';
+                                    }
+                                }
+                            } else {
+                                datasetVefified.innerText = 'ERROR';
+                                // TODO: Show errors & warnings (on hover?)
+                                datasetVefified.style.backgroundColor = 'red';
+                            }
+                        };
+
+                        const xhttpCChainLink = new XMLHttpRequest();
+                        xhttpCChainLink.onload = () => { handleCChainLinkResponse() };
+                        xhttpCChainLink.timeout = 5000;
+                        xhttpCChainLink.ontimeout = (e) => {
+                            datasetVefified.innerText = 'C-Chain Link unreachable';
+                            datasetVefified.style.backgroundColor = 'red';
+                        };
+                        xhttpCChainLink.onerror = (e) => {
+                            datasetVefified.innerText = 'invalid response from C-Chain Link';
+                            datasetVefified.style.backgroundColor = 'red';
+                        };
+                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?transaction_uuid=' + transactionUUID + '&rand=' + new Date().getTime(), true);
+                        xhttpCChainLink.send();
+                    } else {
+                        datasetVefified.innerText = 'not booked in blockchain';
+                        datasetVefified.style.backgroundColor = 'red';
+                    }
+                }
+            };
+            const xhttpTrafficControl = new XMLHttpRequest();
+            xhttpTrafficControl.onload = () => { handleTrafficControlResponse() };
+            xhttpTrafficControl.open('GET', trafficControlUrl + 'ask/aircraft_power?payload=' + payloadTrafficControl + '&rand=' + new Date().getTime(), true);
+            xhttpTrafficControl.send();
+        }
     }
 
     #updateDatasetTableDataFlightData() {
