@@ -281,9 +281,9 @@ class DataValidationApplet {
         for (let datasetId = datasetMinId; datasetId <= datasetMaxId; datasetId++) {
             let newDatasetEntry = document.createElement('tr');
 
-            let datasetVefified = document.createElement('td');
-            datasetVefified.style.backgroundColor = 'orange';
-            datasetVefified.innerText = 'not checked yet';
+            let datasetDataIntegrity = document.createElement('td');
+            datasetDataIntegrity.style.backgroundColor = 'orange';
+            datasetDataIntegrity.innerText = 'not checked yet';
 
             let datasetTransactionUUID = document.createElement('td');
             datasetTransactionUUID.innerText = 'transaction_uuid';
@@ -330,7 +330,7 @@ class DataValidationApplet {
             let datasetRoll = document.createElement('td');
             datasetRoll.innerText = 'roll';
 
-            newDatasetEntry.appendChild(datasetVefified);
+            newDatasetEntry.appendChild(datasetDataIntegrity);
             newDatasetEntry.appendChild(datasetTransactionUUID);
             newDatasetEntry.appendChild(datasetTCId);
             newDatasetEntry.appendChild(datasetDroneId);
@@ -373,7 +373,7 @@ class DataValidationApplet {
 
                     const transactionUUID = response['response_data']['transaction_uuid']
                     if (transactionUUID != null && transactionUUID != '') {
-                        datasetVefified.innerText = 'checking...';
+                        datasetDataIntegrity.innerText = 'checking...';
 
                         const handleCChainLinkResponse = () => {
                             const response = JSON.parse(xhttpCChainLink.response);
@@ -443,17 +443,17 @@ class DataValidationApplet {
                                     }
 
                                     if (allDataValid) {
-                                        datasetVefified.innerText = 'OK';
-                                        datasetVefified.style.backgroundColor = 'green';
+                                        datasetDataIntegrity.innerText = 'OK';
+                                        datasetDataIntegrity.style.backgroundColor = 'green';
                                     } else {
-                                        datasetVefified.innerText = 'DATA MANIPULATED';
-                                        datasetVefified.style.backgroundColor = 'red';
+                                        datasetDataIntegrity.innerText = 'DATA MANIPULATED';
+                                        datasetDataIntegrity.style.backgroundColor = 'red';
                                     }
                                 }
                             } else {
-                                datasetVefified.innerText = 'ERROR';
+                                datasetDataIntegrity.innerText = 'ERROR';
                                 // TODO: Show errors & warnings (on hover?)
-                                datasetVefified.style.backgroundColor = 'red';
+                                datasetDataIntegrity.style.backgroundColor = 'red';
                             }
                         };
 
@@ -461,18 +461,18 @@ class DataValidationApplet {
                         xhttpCChainLink.onload = () => { handleCChainLinkResponse() };
                         xhttpCChainLink.timeout = 5000;
                         xhttpCChainLink.ontimeout = (e) => {
-                            datasetVefified.innerText = 'C-Chain Link unreachable';
-                            datasetVefified.style.backgroundColor = 'red';
+                            datasetDataIntegrity.innerText = 'C-Chain Link unreachable';
+                            datasetDataIntegrity.style.backgroundColor = 'red';
                         };
                         xhttpCChainLink.onerror = (e) => {
-                            datasetVefified.innerText = 'invalid response from C-Chain Link';
-                            datasetVefified.style.backgroundColor = 'red';
+                            datasetDataIntegrity.innerText = 'invalid response from C-Chain Link';
+                            datasetDataIntegrity.style.backgroundColor = 'red';
                         };
                         xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?transaction_uuid=' + transactionUUID + '&rand=' + new Date().getTime(), true);
                         xhttpCChainLink.send();
                     } else {
-                        datasetVefified.innerText = 'not booked in blockchain';
-                        datasetVefified.style.backgroundColor = 'red';
+                        datasetDataIntegrity.innerText = 'not booked in blockchain';
+                        datasetDataIntegrity.style.backgroundColor = 'red';
                     }
                 }
             };
@@ -497,9 +497,9 @@ class DataValidationApplet {
         for (let datasetId = datasetMinId; datasetId <= datasetMaxId; datasetId++) {
             let newDatasetEntry = document.createElement('tr');
 
-            let datasetVefified = document.createElement('td');
-            datasetVefified.style.backgroundColor = 'orange';
-            datasetVefified.innerText = 'not checked yet';
+            let datasetDataIntegrity = document.createElement('td');
+            datasetDataIntegrity.style.backgroundColor = 'orange';
+            datasetDataIntegrity.innerText = 'not checked yet';
 
             let datasetTransactionUUID = document.createElement('td');
             datasetTransactionUUID.innerText = 'transaction_uuid';
@@ -522,7 +522,7 @@ class DataValidationApplet {
             let datasetRemainingFlightRadius = document.createElement('td');
             datasetRemainingFlightRadius.innerText = 'remaining_flight_radius';
 
-            newDatasetEntry.appendChild(datasetVefified);
+            newDatasetEntry.appendChild(datasetDataIntegrity);
             newDatasetEntry.appendChild(datasetTransactionUUID);
             newDatasetEntry.appendChild(datasetTCId);
             newDatasetEntry.appendChild(datasetDroneId);
@@ -547,7 +547,7 @@ class DataValidationApplet {
 
                     const transactionUUID = response['response_data']['transaction_uuid']
                     if (transactionUUID != null && transactionUUID != '') {
-                        datasetVefified.innerText = 'checking...';
+                        datasetDataIntegrity.innerText = 'checking...';
 
                         const handleCChainLinkResponse = () => {
                             const response = JSON.parse(xhttpCChainLink.response);
@@ -585,17 +585,17 @@ class DataValidationApplet {
                                     }
 
                                     if (allDataValid) {
-                                        datasetVefified.innerText = 'OK';
-                                        datasetVefified.style.backgroundColor = 'green';
+                                        datasetDataIntegrity.innerText = 'OK';
+                                        datasetDataIntegrity.style.backgroundColor = 'green';
                                     } else {
-                                        datasetVefified.innerText = 'DATA MANIPULATED';
-                                        datasetVefified.style.backgroundColor = 'red';
+                                        datasetDataIntegrity.innerText = 'DATA MANIPULATED';
+                                        datasetDataIntegrity.style.backgroundColor = 'red';
                                     }
                                 }
                             } else {
-                                datasetVefified.innerText = 'ERROR';
+                                datasetDataIntegrity.innerText = 'ERROR';
                                 // TODO: Show errors & warnings (on hover?)
-                                datasetVefified.style.backgroundColor = 'red';
+                                datasetDataIntegrity.style.backgroundColor = 'red';
                             }
                         };
 
@@ -603,18 +603,18 @@ class DataValidationApplet {
                         xhttpCChainLink.onload = () => { handleCChainLinkResponse() };
                         xhttpCChainLink.timeout = 5000;
                         xhttpCChainLink.ontimeout = (e) => {
-                            datasetVefified.innerText = 'C-Chain Link unreachable';
-                            datasetVefified.style.backgroundColor = 'red';
+                            datasetDataIntegrity.innerText = 'C-Chain Link unreachable';
+                            datasetDataIntegrity.style.backgroundColor = 'red';
                         };
                         xhttpCChainLink.onerror = (e) => {
-                            datasetVefified.innerText = 'invalid response from C-Chain Link';
-                            datasetVefified.style.backgroundColor = 'red';
+                            datasetDataIntegrity.innerText = 'invalid response from C-Chain Link';
+                            datasetDataIntegrity.style.backgroundColor = 'red';
                         };
                         xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?transaction_uuid=' + transactionUUID + '&rand=' + new Date().getTime(), true);
                         xhttpCChainLink.send();
                     } else {
-                        datasetVefified.innerText = 'not booked in blockchain';
-                        datasetVefified.style.backgroundColor = 'red';
+                        datasetDataIntegrity.innerText = 'not booked in blockchain';
+                        datasetDataIntegrity.style.backgroundColor = 'red';
                     }
                 }
             };
@@ -626,7 +626,190 @@ class DataValidationApplet {
     }
 
     #updateDatasetTableDataFlightData() {
+        const datasetIdRangeSelecor = document.getElementsByClassName('dataValidationApplet_datasetIdRangeSelector')[0];
 
+        const flightDataTableWrapper = document.getElementsByClassName('dataValidationApplet_flightDataTableWrapper')[0];
+
+        const tableBody = flightDataTableWrapper.querySelectorAll('tbody')[0];
+        tableBody.innerHTML = '';
+
+
+        const datasetMinId = parseInt(datasetIdRangeSelecor.options[this.#flightDataIdRangeSelectionIndex].dataset.min_id);
+        const datasetMaxId = parseInt(datasetIdRangeSelecor.options[this.#flightDataIdRangeSelectionIndex].dataset.max_id);
+        for (let datasetId = datasetMinId; datasetId <= datasetMaxId; datasetId++) {
+            let newDatasetEntry = document.createElement('tr');
+
+            let datasetDataIntegrity = document.createElement('td');
+            datasetDataIntegrity.style.backgroundColor = 'orange';
+            datasetDataIntegrity.innerText = 'not checked yet';
+
+            let datasetTransactionUUID = document.createElement('td');
+            datasetTransactionUUID.innerText = 'transaction_uuid';
+
+            let datasetTCId = document.createElement('td');
+            datasetTCId.innerText = datasetId;
+
+            let datasetDroneId = document.createElement('td');
+            datasetDroneId.innerText = this.#droneId;
+
+            let datasetTakeoffTime = document.createElement('td');
+            datasetTakeoffTime.innerText = 'takeoff_time';
+
+            let datasetTakeoffGpsValid = document.createElement('td');
+            datasetTakeoffGpsValid.innerText = 'takeoff_gps_valid';
+
+            let datasetTakeoffGpsLat = document.createElement('td');
+            datasetTakeoffGpsLat.innerText = 'takeoff_gps_lat';
+
+            let datasetTakeoffGpsLon = document.createElement('td');
+            datasetTakeoffGpsLon.innerText = 'takeoff_gps_lon';
+
+            let datasetLandingTime = document.createElement('td');
+            datasetLandingTime.innerText = 'landing_time';
+
+            let datasetLandingGpsValid = document.createElement('td');
+            datasetLandingGpsValid.innerText = 'landing_gps_valid';
+
+            let datasetLandingGpsLat = document.createElement('td');
+            datasetLandingGpsLat.innerText = 'landing_gps_lat';
+
+            let datasetLandingGpsLon = document.createElement('td');
+            datasetLandingGpsLon.innerText = 'landing_gps_lon';
+
+            let datasetOperationModes = document.createElement('td');
+            datasetOperationModes.innerText = 'operation_modes';
+
+            newDatasetEntry.appendChild(datasetDataIntegrity);
+            newDatasetEntry.appendChild(datasetTransactionUUID);
+            newDatasetEntry.appendChild(datasetTCId);
+            newDatasetEntry.appendChild(datasetDroneId);
+            newDatasetEntry.appendChild(datasetTakeoffTime);
+            newDatasetEntry.appendChild(datasetTakeoffGpsValid);
+            newDatasetEntry.appendChild(datasetTakeoffGpsLat);
+            newDatasetEntry.appendChild(datasetTakeoffGpsLon);
+            newDatasetEntry.appendChild(datasetLandingTime);
+            newDatasetEntry.appendChild(datasetLandingGpsValid);
+            newDatasetEntry.appendChild(datasetLandingGpsLat);
+            newDatasetEntry.appendChild(datasetLandingGpsLon);
+            newDatasetEntry.appendChild(datasetOperationModes);
+
+            tableBody.appendChild(newDatasetEntry);
+
+            const payloadTrafficControl = '{"drone_id": "' + this.#droneId + '","data_type": "flight_data", "data": {"data_id": ' + datasetId + '}}';
+            const handleTrafficControlResponse = () => {
+                const response = JSON.parse(xhttpTrafficControl.responseText);
+                if (response['executed'] && response['response_data'] != null) {
+                    datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
+                    //datasetTCId.innerText = datasetId;
+                    //datasetDroneId.innerText = response['response_data']['drone_id'];
+                    datasetTakeoffTime.innerText = response['response_data']['takeoff_time'];
+                    datasetTakeoffGpsValid.innerText = response['response_data']['takeoff_gps_valid'] ? 'true' : 'false';
+                    datasetTakeoffGpsLat.innerText = response['response_data']['takeoff_gps_lat'];
+                    datasetTakeoffGpsLon.innerText = response['response_data']['takeoff_gps_lon'];
+                    datasetLandingTime.innerText = response['response_data']['landing_time'];
+                    datasetLandingGpsValid.innerText = response['response_data']['landing_gps_valid'] ? 'true' : 'false';
+                    datasetLandingGpsLat.innerText = response['response_data']['landing_gps_lat'];
+                    datasetLandingGpsLon.innerText = response['response_data']['landing_gps_lon'];
+                    datasetOperationModes.innerText = response['response_data']['operation_modes'];
+
+                    const transactionUUID = response['response_data']['transaction_uuid']
+                    if (transactionUUID != null && transactionUUID != '') {
+                        datasetDataIntegrity.innerText = 'checking...';
+
+                        const handleCChainLinkResponse = () => {
+                            const response = JSON.parse(xhttpCChainLink.response);
+
+                            if (response['executed']) {
+                                if (response['response_data'] != null) {
+                                    const responseTransactionUUID = response['response_data']['transaction_uuid'];
+                                    const responseTransactionData = JSON.parse(response['response_data']['transaction_data']);
+
+                                    let allDataValid = true;
+
+                                    if (datasetTransactionUUID.innerText != responseTransactionUUID) {
+                                        allDataValid = false;
+                                        datasetTransactionUUID.innerHTML = '<s>' + datasetTransactionUUID.innerText + '</s> / <b>' + responseTransactionUUID + '</b>';
+                                    }
+                                    if (datasetDroneId.innerText != responseTransactionData['drone_id']) {
+                                        allDataValid = false;
+                                        datasetDroneId.innerHTML = '<s>' + datasetDroneId.innerText + '</s> / <b>' + responseTransactionData['drone_id'] + '</b>';
+                                    }
+                                    if (datasetTakeoffTime.innerText != responseTransactionData['data']['takeoff_time']) {
+                                        allDataValid = false;
+                                        datasetTakeoffTime.innerHTML = '<s>' + datasetTakeoffTime.innerText + '</s> / <b>' + responseTransactionData['data']['takeoff_time'] + '</b>';
+                                    }
+                                    if (toBoolean(datasetTakeoffGpsValid.innerText) != responseTransactionData['data']['takeoff_gps_valid']) {
+                                        allDataValid = false;
+                                        datasetTakeoffGpsValid.innerHTML = '<s>' + datasetTakeoffGpsValid.innerText + '</s> / <b>' + responseTransactionData['data']['takeoff_gps_valid'] + '</b>';
+                                    }
+                                    if (datasetTakeoffGpsLat.innerText != responseTransactionData['data']['takeoff_gps_lat']) {
+                                        allDataValid = false;
+                                        datasetTakeoffGpsLat.innerHTML = '<s>' + datasetTakeoffGpsLat.innerText + '</s> / <b>' + responseTransactionData['data']['takeoff_gps_lat'] + '</b>';
+                                    }
+                                    if (datasetTakeoffGpsLon.innerText != responseTransactionData['data']['takeoff_gps_lon']) {
+                                        allDataValid = false;
+                                        datasetTakeoffGpsLon.innerHTML = '<s>' + datasetTakeoffGpsLon.innerText + '</s> / <b>' + responseTransactionData['data']['takeoff_gps_lon'] + '</b>';
+                                    }
+                                    if (datasetLandingTime.innerText != responseTransactionData['data']['landing_time']) {
+                                        allDataValid = false;
+                                        datasetLandingTime.innerHTML = '<s>' + datasetLandingTime.innerText + '</s> / <b>' + responseTransactionData['data']['landing_time'] + '</b>';
+                                    }
+                                    if (toBoolean(datasetLandingGpsValid.innerText) != responseTransactionData['data']['landing_gps_valid']) {
+                                        allDataValid = false;
+                                        datasetLandingGpsValid.innerHTML = '<s>' + datasetLandingGpsValid.innerText + '</s> / <b>' + responseTransactionData['data']['landing_gps_valid'] + '</b>';
+                                    }
+                                    if (datasetLandingGpsLat.innerText != responseTransactionData['data']['landing_gps_lat']) {
+                                        allDataValid = false;
+                                        datasetLandingGpsLat.innerHTML = '<s>' + datasetLandingGpsLat.innerText + '</s> / <b>' + responseTransactionData['data']['landing_gps_lat'] + '</b>';
+                                    }
+                                    if (datasetLandingGpsLon.innerText != responseTransactionData['data']['landing_gps_lon']) {
+                                        allDataValid = false;
+                                        datasetLandingGpsLon.innerHTML = '<s>' + datasetLandingGpsLon.innerText + '</s> / <b>' + responseTransactionData['data']['landing_gps_lon'] + '</b>';
+                                    }
+                                    if (datasetOperationModes.innerText != responseTransactionData['data']['operation_modes']) {
+                                        allDataValid = false;
+                                        datasetOperationModes.innerHTML = '<s>' + datasetOperationModes.innerText + '</s> / <b>' + responseTransactionData['data']['operation_modes'] + '</b>';
+                                    }
+
+                                    if (allDataValid) {
+                                        datasetDataIntegrity.innerText = 'OK';
+                                        datasetDataIntegrity.style.backgroundColor = 'green';
+                                    } else {
+                                        datasetDataIntegrity.innerText = 'DATA MANIPULATED';
+                                        datasetDataIntegrity.style.backgroundColor = 'red';
+                                    }
+                                }
+                            } else {
+                                datasetDataIntegrity.innerText = 'ERROR';
+                                // TODO: Show errors & warnings (on hover?)
+                                datasetDataIntegrity.style.backgroundColor = 'red';
+                            }
+                        };
+
+                        const xhttpCChainLink = new XMLHttpRequest();
+                        xhttpCChainLink.onload = () => { handleCChainLinkResponse() };
+                        xhttpCChainLink.timeout = 5000;
+                        xhttpCChainLink.ontimeout = (e) => {
+                            datasetDataIntegrity.innerText = 'C-Chain Link unreachable';
+                            datasetDataIntegrity.style.backgroundColor = 'red';
+                        };
+                        xhttpCChainLink.onerror = (e) => {
+                            datasetDataIntegrity.innerText = 'invalid response from C-Chain Link';
+                            datasetDataIntegrity.style.backgroundColor = 'red';
+                        };
+                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?transaction_uuid=' + transactionUUID + '&rand=' + new Date().getTime(), true);
+                        xhttpCChainLink.send();
+                    } else {
+                        datasetDataIntegrity.innerText = 'not booked in blockchain';
+                        datasetDataIntegrity.style.backgroundColor = 'red';
+                    }
+                }
+            };
+            const xhttpTrafficControl = new XMLHttpRequest();
+            xhttpTrafficControl.onload = () => { handleTrafficControlResponse() };
+            xhttpTrafficControl.open('GET', trafficControlUrl + 'ask/flight_data?payload=' + payloadTrafficControl + '&rand=' + new Date().getTime(), true);
+            xhttpTrafficControl.send();
+        }
     }
 
 
