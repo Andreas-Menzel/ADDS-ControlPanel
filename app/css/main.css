@@ -6,12 +6,13 @@
 #page {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, auto);
+    grid-template-rows: repeat(5, auto);
 
-    grid-template-areas: 'mapApplet            mapApplet'
-                         'dataValidationApplet dataValidationApplet'
-                         'altitudeApplet       velocityApplet'
-                         'droneSoCApplet       droneRemDistApplet';
+    grid-template-areas: 'mapApplet                      mapApplet'
+                         'dataValidationApplet           dataValidationApplet'
+                         'altitudeApplet                 velocityApplet'
+                         'droneSoCApplet                 droneRemDistApplet'
+                         'infrastructureManagementApplet infrastructureManagementApplet';
 
     row-gap: 1.5rem;
     column-gap: 1.5rem;
@@ -22,8 +23,7 @@
 
 #mapApplet {
     grid-area: mapApplet;
-    aheight: 60vh;
-    height: 30vh;
+    height: 60vh;
 }
 #dataValidationApplet {
     grid-area: dataValidationApplet;
@@ -44,6 +44,9 @@
 }
 #droneRemDistApplet {
     grid-area: droneRemDistApplet;
+}
+#infrastructureManagementApplet {
+    grid-area: infrastructureManagementApplet;
 }
 
 .appletWrapper {
@@ -109,7 +112,7 @@ button.standardButton {
     letter-spacing: 2px;
     min-width: 7rem;
     atext-transform: uppercase;
-    white-space: normal;
+    white-space: nowrap;
     font-weight: bold;
     text-align: center;
     padding: 16px 14px 18px;
@@ -124,6 +127,12 @@ button.standardButton:hover,
 button.buttonActive {
     color: #fff;
     background-color: #616467;
+}
+
+button.standardButton[disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.6;
 }
 
 
@@ -170,4 +179,10 @@ table tbody tr:hover {
 
 b {
     font-weight: bold;
+}
+
+
+input {
+    min-width: 10rem;
+    width: 100%;
 }

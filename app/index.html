@@ -31,7 +31,8 @@
         <div id="dataValidationApplet" class="appletWrapper">
             <div class="appletControlPanel">
                 <div class="controlPanelLine">
-                    <button class="btn_dataValidationApplet_showAircraftLocation standardButton buttonActive">Aircraft Location</button>
+                    <button class="btn_dataValidationApplet_showAircraftLocation standardButton buttonActive">Aircraft
+                        Location</button>
                     <button class="btn_dataValidationApplet_showAircraftPower standardButton">Aircraft Power</button>
                     <button class="btn_dataValidationApplet_showFlightData standardButton">Flight data</button>
                 </div>
@@ -64,7 +65,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -124,7 +125,7 @@
             </div>
             <span class="appletName">DroneAltitudeApplet</span>
         </div>
-        
+
         <div id="droneVelocityApplet" class="appletWrapper">
             <div class="appletControlPanel">
                 <button class="btnChangeSystem standardButton">Switch to NWU</button>
@@ -149,22 +150,62 @@
             </div>
             <span class="appletName">DroneRemDistApplet</span>
         </div>
-    </div>
+
+        <div id="infrastructureManagementApplet" class="appletWrapper">
+            <div class="appletControlPanel">
+                <div class="controlPanelLine">
+                    <button
+                        class="btn_infrastructureManagementApplet_showIntersections standardButton buttonActive">Intersections</button>
+                    <button class="btn_infrastructureManagementApplet_showCorridors standardButton">Corridors</button>
+                </div>
+            </div>
+            <div class="tableWrapper">
+                <div class="infrastructureManagementApplet_intersectionsTableWrapper" style="display: none;">
+                    <table>
+                        <thead>
+                            <th>id</th>
+                            <th>gps_lat</th>
+                            <th>gps_lon</th>
+                            <th>altitude</th>
+                            <th style="width: 0;">Data origin</th>
+                            <th style="width: 0;">Save</th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="infrastructureManagementApplet_corridorsTableWrapper" style="display: none;">
+                    <table>
+                        <thead>
+                            <th>id</th>
+                            <th style="width: 0;">intersection_a</th>
+                            <th style="width: 0;">intersection_b</th>
+                            <th style="width: 0;">Save</th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span class="appletName">InfrastructureManagementApplet</span>
+        </div>
 
 
-    <script src="./js/informationHolders/Drone.js"></script>
-    <script src="./js/informationHolders/Intersection.js"></script>
-    <script src="./js/informationHolders/Corridor.js"></script>
+        <script src="./js/informationHolders/Drone.js"></script>
+        <script src="./js/informationHolders/Intersection.js"></script>
+        <script src="./js/informationHolders/Corridor.js"></script>
 
-    <script src="./js/applets/MapApplet.js"></script>
-    <script src="./js/applets/DataValidationApplet.js"></script>
-    <script src="./js/applets/DroneAltitudeApplet.js"></script>
-    <script src="./js/applets/DroneVelocityApplet.js"></script>
-    <script src="./js/applets/DroneSoCApplet.js"></script>
-    <script src="./js/applets/DroneRemDistApplet.js"></script>
+        <script src="./js/applets/MapApplet.js"></script>
+        <script src="./js/applets/DataValidationApplet.js"></script>
+        <script src="./js/applets/DroneAltitudeApplet.js"></script>
+        <script src="./js/applets/DroneVelocityApplet.js"></script>
+        <script src="./js/applets/DroneSoCApplet.js"></script>
+        <script src="./js/applets/DroneRemDistApplet.js"></script>
+        <script src="./js/applets/InfrastructureManagementApplet.js"></script>
 
-    <script src="./demo_data/data_sanitized.js"></script>
-    <script src="./js/main.js"></script>
+        <script src="./demo_data/data_sanitized.js"></script>
+        <script src="./js/main.js"></script>
 </body>
 
 </html>
