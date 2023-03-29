@@ -42,14 +42,31 @@ class MapApplet {
         const btnAutoAdjust = mapApplet.getElementsByClassName('btnAutoAdjust')[0];
         const btnShowInfrastructure = mapApplet.getElementsByClassName('btnShowInfrastructure')[0];
 
+        const updateButtonTextAutoAdjust = () => {
+            if (this.#autoAdjustEnabled) {
+                btnAutoAdjust.innerHTML = 'Disable auto-adjust';
+            } else {
+                btnAutoAdjust.innerHTML = 'Enable auto-adjust';
+            }
+        };
+        const updateButtonTextShowInfrastructure = () => {
+            if (this.#showInfrastructure) {
+                btnShowInfrastructure.innerHTML = 'Hide infrastructure';
+            } else {
+                btnShowInfrastructure.innerHTML = 'Show infrastructure';
+            }
+        };
+
+        updateButtonTextAutoAdjust();
+        updateButtonTextShowInfrastructure();
+
         btnAutoAdjust.addEventListener('click', () => {
             if (this.#autoAdjustEnabled) {
                 this.#autoAdjustEnabled = false;
-                btnAutoAdjust.innerHTML = 'Enable auto-adjust';
             } else {
                 this.#autoAdjustEnabled = true;
-                btnAutoAdjust.innerHTML = 'Disable auto-adjust';
             }
+            updateButtonTextAutoAdjust();
 
             this.update(this.#drones, this.#intersections, this.#corridors);
         });
@@ -59,11 +76,10 @@ class MapApplet {
 
             if (this.#showInfrastructure) {
                 this.#showInfrastructure = false;
-                btnShowInfrastructure.innerHTML = 'Show infrastructure';
             } else {
                 this.#showInfrastructure = true;
-                btnShowInfrastructure.innerHTML = 'Hide infrastructure';
             }
+            updateButtonTextShowInfrastructure();
 
             this.update(this.#drones, this.#intersections, this.#corridors);
         });

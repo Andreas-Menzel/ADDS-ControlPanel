@@ -40,14 +40,31 @@ class DroneVelocityApplet {
         const btnChangeSystem = droneVelocityApplet.getElementsByClassName('btnChangeSystem')[0];
         const btnChangeUnit = droneVelocityApplet.getElementsByClassName('btnChangeUnit')[0];
 
+        const updateButtonTextSwitchNEDNWU = () => {
+            if (this.#system == 'NED') {
+                btnChangeSystem.innerHTML = 'Switch to NWU';
+            } else {
+                btnChangeSystem.innerHTML = 'Switch to NED';
+            }
+        }
+        const updateButtonTextmskmh = () => {
+            if (this.#unit == 'km/h') {
+                btnChangeUnit.innerHTML = 'Switch to m/s';
+            } else {
+                btnChangeUnit.innerHTML = 'Switch to km/h';
+            }
+        }
+
+        updateButtonTextSwitchNEDNWU();
+        updateButtonTextmskmh();
+
         btnChangeSystem.addEventListener('click', () => {
             if (this.#system == 'NED') {
                 this.#system = 'NWU';
-                btnChangeSystem.innerHTML = 'Switch to NED';
             } else {
                 this.#system = 'NED';
-                btnChangeSystem.innerHTML = 'Switch to NWU';
             }
+            updateButtonTextSwitchNEDNWU();
 
             updateLabels();
 
@@ -57,11 +74,10 @@ class DroneVelocityApplet {
         btnChangeUnit.addEventListener('click', () => {
             if (this.#unit == 'km/h') {
                 this.#unit = 'm/s';
-                btnChangeUnit.innerHTML = 'Switch to km/h';
             } else {
                 this.#unit = 'km/h';
-                btnChangeUnit.innerHTML = 'Switch to m/s';
             }
+            updateButtonTextmskmh();
 
             updateLabels();
 
