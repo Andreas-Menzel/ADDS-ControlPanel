@@ -146,12 +146,47 @@ class InfrastructureManagementApplet {
 
             entryDataSource.appendChild(entryDataSourceButton);
 
-            let entryBtnSave = document.createElement('button');
-            entryBtnSave.innerText = 'Save';
-            entryBtnSave.classList.add('standardButton');
-            entryBtnSave.style.width = '0';
-            entryBtnSave.disabled = true;
-            entryBtnSave.onclick = () => {
+            let entryBtnDelete = document.createElement('td');
+            let entryBtnDeleteButton = document.createElement('button');
+            entryBtnDelete.appendChild(entryBtnDeleteButton);
+
+            entryBtnDeleteButton.innerText = 'Delete';
+            entryBtnDeleteButton.classList.add('standardButton');
+            entryBtnDeleteButton.style.width = '0';
+            entryBtnDeleteButton.onclick = () => {
+                // Deactivate all input fields
+                let everythingToDisable = intersectionsTableWrapper.querySelectorAll('input, select, button');
+                for (let input of everythingToDisable) {
+                    input.disabled = true;
+                }
+
+                const payload = {
+                    'intersection_id': entryIdInput.value,
+                    'data_type': 'delete_intersection'
+                };
+                const handleResponse = () => {
+                    const response = JSON.parse(xhttp.response);
+
+                    if (response['executed']) {
+                        delete this.#intersections[intersectionId];
+                    }
+                    this.#updateTableContents();
+                };
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = () => { handleResponse() };
+                xhttp.open('GET', trafficControlUrl + 'tell/delete_intersection?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
+                xhttp.send();
+            };
+
+            let entryBtnSave = document.createElement('td');
+            let entryBtnSaveButton = document.createElement('button');
+            entryBtnSave.appendChild(entryBtnSaveButton);
+
+            entryBtnSaveButton.innerText = 'Save';
+            entryBtnSaveButton.classList.add('standardButton');
+            entryBtnSaveButton.style.width = '0';
+            entryBtnSaveButton.disabled = true;
+            entryBtnSaveButton.onclick = () => {
                 if (entryIdInput.value == 'NEW_INTERSECTION_ID') {
                     alert('Please set (another) intersection id!');
                     return;
@@ -179,9 +214,8 @@ class InfrastructureManagementApplet {
                         delete tmpIntersections[intersectionId];
                         this.#intersections[entryIdInput.value] = new Intersection(entryIdInput.value);
                         this.#intersections[entryIdInput.value].setValues(entryGpsLatInput.value, entryGpsLonInput.value, entryAltitudeInput.value);
-
-                        this.#updateTableContents();
                     }
+                    this.#updateTableContents();
                 };
                 const xhttp = new XMLHttpRequest();
                 xhttp.onload = () => { handleResponse() };
@@ -190,16 +224,16 @@ class InfrastructureManagementApplet {
             };
 
             entryIdInput.oninput = () => {
-                entryBtnSave.disabled = false;
+                entryBtnSaveButton.disabled = false;
             }
             entryGpsLatInput.oninput = () => {
-                entryBtnSave.disabled = false;
+                entryBtnSaveButton.disabled = false;
             }
             entryGpsLonInput.oninput = () => {
-                entryBtnSave.disabled = false;
+                entryBtnSaveButton.disabled = false;
             }
             entryAltitudeInput.oninput = () => {
-                entryBtnSave.disabled = false;
+                entryBtnSaveButton.disabled = false;
             }
 
             newIntersectionEntry.appendChild(entryId);
@@ -207,13 +241,19 @@ class InfrastructureManagementApplet {
             newIntersectionEntry.appendChild(entryGpsLon);
             newIntersectionEntry.appendChild(entryAltitude);
             newIntersectionEntry.appendChild(entryDataSource);
+            newIntersectionEntry.appendChild(entryBtnDelete);
             newIntersectionEntry.appendChild(entryBtnSave);
 
             tableBody.appendChild(newIntersectionEntry);
         }
 
-        // Enable id input for new intersection 
+        // Enable id input for new intersection
         tableBody.children[tableBody.children.length - 1].children[0].children[0].disabled = false;
+        // Set button text of new intersection to 'Create'
+        tableBody.children[tableBody.children.length - 1].children[6].children[0].innerText = 'Create';
+        
+        // Disable delete button for new intersection
+        tableBody.children[tableBody.children.length - 1].children[5].children[0].disabled = true;
     }
 
     #updateCorridorsTableContent() {
@@ -288,12 +328,47 @@ class InfrastructureManagementApplet {
 
             disableSelectedIntersectionOptions();
 
+            let entryBtnDelete = document.createElement('td');
+            let entryBtnDeleteButton = document.createElement('button');
+            entryBtnDelete.appendChild(entryBtnDeleteButton);
+
+            entryBtnDeleteButton.innerText = 'Delete';
+            entryBtnDeleteButton.classList.add('standardButton');
+            entryBtnDeleteButton.style.width = '0';
+            entryBtnDeleteButton.onclick = () => {
+                // Deactivate all input fields
+                let everythingToDisable = corridorsTableWrapper.querySelectorAll('input, select, button');
+                for (let input of everythingToDisable) {
+                    input.disabled = true;
+                }
+
+                const payload = {
+                    'corridor_id': entryIdInput.value,
+                    'data_type': 'delete_corridor'
+                };
+                const handleResponse = () => {
+                    const response = JSON.parse(xhttp.response);
+
+                    if (response['executed']) {
+                        delete this.#corridors[corridorId];
+                    }
+                    this.#updateTableContents();
+                };
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = () => { handleResponse() };
+                xhttp.open('GET', trafficControlUrl + 'tell/delete_corridor?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
+                xhttp.send();
+            };
+
             let entryBtnSave = document.createElement('button');
-            entryBtnSave.innerText = 'Save';
-            entryBtnSave.classList.add('standardButton');
-            entryBtnSave.style.width = '0';
-            entryBtnSave.disabled = true;
-            entryBtnSave.onclick = () => {
+            let entryBtnSaveButton = document.createElement('button');
+            entryBtnSave.appendChild(entryBtnSaveButton);
+
+            entryBtnSaveButton.innerText = 'Save';
+            entryBtnSaveButton.classList.add('standardButton');
+            entryBtnSaveButton.style.width = '0';
+            entryBtnSaveButton.disabled = true;
+            entryBtnSaveButton.onclick = () => {
                 if (entryIdInput.value == 'NEW_CORRIDOR_ID') {
                     alert('Please set (another) corridor id!');
                     return;
@@ -320,9 +395,8 @@ class InfrastructureManagementApplet {
                         delete tmpCorridors[corridorId];
                         this.#corridors[entryIdInput.value] = new Corridor(entryIdInput.value);
                         this.#corridors[entryIdInput.value].setValues(entryIntersectionASelect.value, entryIntersectionBSelect.value);
-
-                        this.#updateTableContents();
                     }
+                    this.#updateTableContents();
                 };
                 const xhttp = new XMLHttpRequest();
                 xhttp.onload = () => { handleResponse() };
@@ -331,29 +405,35 @@ class InfrastructureManagementApplet {
             };
 
             entryIdInput.oninput = () => {
-                entryBtnSave.disabled = false;
+                entryBtnSaveButton.disabled = false;
             }
             entryIntersectionASelect.onchange = () => {
                 disableSelectedIntersectionOptions();
 
-                entryBtnSave.disabled = false;
+                entryBtnSaveButton.disabled = false;
             }
             entryIntersectionBSelect.onchange = () => {
                 disableSelectedIntersectionOptions();
 
-                entryBtnSave.disabled = false;
+                entryBtnSaveButton.disabled = false;
             }
 
             newCorridorEntry.appendChild(entryId);
             newCorridorEntry.appendChild(entryIntersectionA);
             newCorridorEntry.appendChild(entryIntersectionB);
+            newCorridorEntry.appendChild(entryBtnDelete);
             newCorridorEntry.appendChild(entryBtnSave);
 
             tableBody.appendChild(newCorridorEntry);
         }
 
-        // Enable id input for new corridor 
+        // Enable id input for new intersection
         tableBody.children[tableBody.children.length - 1].children[0].children[0].disabled = false;
+        // Set button text of new intersection to 'Create'
+        tableBody.children[tableBody.children.length - 1].children[4].children[0].innerText = 'Create';
+        
+        // Disable delete button for new intersection
+        tableBody.children[tableBody.children.length - 1].children[3].children[0].disabled = true;
     }
 
 
