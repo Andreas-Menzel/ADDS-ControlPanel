@@ -11,6 +11,11 @@ class Drone {
 
     #drone_id;
 
+    #active;
+    #chain_uuid_mission;
+    #chain_uuid_blackbox;
+
+
     #gpsSignalLevel;
     #gpsSatellitesConnected;
 
@@ -61,6 +66,10 @@ class Drone {
 
 
     setDefaultValues() {
+        this.#active = false;
+        this.#chain_uuid_mission = null;
+        this.#chain_uuid_blackbox = null;
+
         this.#gpsSignalLevel = 0;
         this.#gpsSatellitesConnected = 0;
 
@@ -96,6 +105,12 @@ class Drone {
         this.#landingGpsLon = 0;
 
         this.#operationModes = [];
+    }
+
+    setValues(active, chain_uuid_mission, chain_uuid_blackbox) {
+        this.#active = active;
+        this.#chain_uuid_mission = chain_uuid_mission;
+        this.#chain_uuid_blackbox = chain_uuid_blackbox;
     }
 
     updateValues() {
@@ -240,6 +255,16 @@ class Drone {
 
     getDroneId() {
         return this.#drone_id;
+    }
+
+    getActive() {
+        return this.#active;
+    }
+    getChainUuidMission() {
+        return this.#chain_uuid_mission;
+    }
+    getChainUuidBlackbox() {
+        return this.#chain_uuid_blackbox;
     }
 
     getGpsSignalLevel() {

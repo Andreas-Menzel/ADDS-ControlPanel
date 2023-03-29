@@ -74,12 +74,38 @@ let drones = {};
 let intersections = {};
 let corridors = {};
 
-// DEMO ONLY
-drones['demo_drone'] = new Drone('demo_drone');
-
 
 function updateDroneList() {
+    const payload = '{"drone_id": "%","data_type": "drone_list"}';
+    const handleResponse = () => {
+        const response = JSON.parse(xhttp.responseText);
+        if (response['executed']) {
+            const droneIds = Object.keys(response['response_data']);
+            const myDroneIds = Object.keys(drones);
 
+            const dronesToAdd = droneIds.filter(x => !myDroneIds.includes(x));
+            const dronesToRemove = myDroneIds.filter(x => !droneIds.includes(x));
+
+            for (let newDroneId of dronesToAdd) {
+                drones[newDroneId] = new Drone(newDroneId);
+            }
+            for (let remDroneId of dronesToRemove) {
+                delete drones[remDroneId];
+            }
+
+            for (let droneId of droneIds) {
+                const active = response['response_data'][droneId]['active'];
+                const chain_uuid_mission = response['response_data'][droneId]['chain_uuid_mission'];
+                const chain_uuid_blackbox = response['response_data'][droneId]['chain_uuid_blackbox'];
+
+                drones[droneId].setValues(active, chain_uuid_mission, chain_uuid_blackbox);
+            }
+        }
+    };
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = () => { handleResponse() };
+    xhttp.open('GET', trafficControlUrl + 'ask/drone_list?payload=' + payload, true);
+    xhttp.send();
 }
 
 function updateIntersectionList() {
@@ -93,14 +119,14 @@ function updateIntersectionList() {
             const intersectionsToAdd = intersectionIds.filter(x => !myIntersectionIds.includes(x));
             const intersectionsToRemove = myIntersectionIds.filter(x => !intersectionIds.includes(x));
 
-            for (newIntId of intersectionsToAdd) {
+            for (let newIntId of intersectionsToAdd) {
                 intersections[newIntId] = new Intersection(newIntId);
             }
-            for (remIntId of intersectionsToRemove) {
+            for (let remIntId of intersectionsToRemove) {
                 delete intersections[remIntId];
             }
 
-            for (intId of intersectionIds) {
+            for (let intId of intersectionIds) {
                 const gpsLat = response['response_data'][intId]['gps_lat'];
                 const gpsLon = response['response_data'][intId]['gps_lon'];
                 const altitude = response['response_data'][intId]['altitude'];
@@ -128,14 +154,14 @@ function updateCorridorList() {
             const corridorsToAdd = corridorIds.filter(x => !myCorridorIds.includes(x));
             const corridorsToRemove = myCorridorIds.filter(x => !corridorIds.includes(x));
 
-            for (newCorId of corridorsToAdd) {
+            for (let newCorId of corridorsToAdd) {
                 corridors[newCorId] = new Corridor(newCorId);
             }
-            for (remCorId of corridorsToRemove) {
+            for (let remCorId of corridorsToRemove) {
                 delete corridors[remCorId];
             }
 
-            for (corId of corridorIds) {
+            for (let corId of corridorIds) {
                 const intersectionAId = response['response_data'][corId]['intersection_a'];
                 const intersectionBId = response['response_data'][corId]['intersection_b'];
 
