@@ -34,6 +34,7 @@ class DroneVelocityApplet {
                 this.#chart.config.data.datasets[1].label = 'Velocity Y (West) in ' + this.#unit;
                 this.#chart.config.data.datasets[2].label = 'Velocity Z (Up) in ' + this.#unit;
             }
+            this.#chart.config.data.datasets[3].label = 'Combined velocity in ' + this.#unit;
         };
 
         const droneVelocityApplet = document.getElementById('droneVelocityApplet');
@@ -108,6 +109,10 @@ class DroneVelocityApplet {
                     {
                         label: 'Velocity Z (Down) in ' + this.#unit,
                         data: []
+                    },
+                    {
+                        label: 'Combined velocity in ' + this.#unit,
+                        data: []
                     }
                 ]
             },
@@ -157,13 +162,17 @@ class DroneVelocityApplet {
                         velocityZ *= -1;
                     }
 
+                    const combinedVelocity = Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2), Math.pow(velocityZ, 2));
+
                     this.#chart.config.data.datasets[0].data[i] = velocityX;
                     this.#chart.config.data.datasets[1].data[i] = velocityY;
                     this.#chart.config.data.datasets[2].data[i] = velocityZ;
+                    this.#chart.config.data.datasets[3].data[i] = combinedVelocity;
 
                     if (Math.abs(velocityX) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityX);
                     if (Math.abs(velocityY) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityY);
                     if (Math.abs(velocityZ) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityZ);
+                    if (Math.abs(combinedVelocity) > usualMaxVelocity) usualMaxVelocity = Math.abs(combinedVelocity);
                 }
             } else {
                 // Different drones
@@ -174,6 +183,7 @@ class DroneVelocityApplet {
                 this.#chart.config.data.datasets[0].data = [];
                 this.#chart.config.data.datasets[1].data = [];
                 this.#chart.config.data.datasets[2].data = [];
+                this.#chart.config.data.datasets[3].data = [];
 
                 for (const [_, drone] of Object.entries(drones)) {
                     this.#chart.config.data.labels.push(drone.getDroneId());
@@ -193,13 +203,17 @@ class DroneVelocityApplet {
                         velocityZ *= -1;
                     }
 
+                    const combinedVelocity = Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2), Math.pow(velocityZ, 2));
+
                     this.#chart.config.data.datasets[0].data.push(velocityX);
                     this.#chart.config.data.datasets[1].data.push(velocityY);
                     this.#chart.config.data.datasets[2].data.push(velocityZ);
+                    this.#chart.config.data.datasets[3].data.push(combinedVelocity);
 
                     if (Math.abs(velocityX) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityX);
                     if (Math.abs(velocityY) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityY);
                     if (Math.abs(velocityZ) > usualMaxVelocity) usualMaxVelocity = Math.abs(velocityZ);
+                    if (Math.abs(combinedVelocity) > usualMaxVelocity) usualMaxVelocity = Math.abs(combinedVelocity);
                 }
             }
 
