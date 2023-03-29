@@ -468,7 +468,10 @@ class DataValidationApplet {
                             datasetDataIntegrity.innerText = 'invalid response from C-Chain Link';
                             datasetDataIntegrity.style.backgroundColor = 'red';
                         };
-                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?transaction_uuid=' + transactionUUID + '&rand=' + new Date().getTime(), true);
+                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?'
+                                                    + 'chain_uuid=' + drones[this.#droneId].getChainUuidBlackbox()
+                                                    + '&transaction_uuid=' + transactionUUID
+                                                    + '&rand=' + new Date().getTime(), true);
                         xhttpCChainLink.send();
                     } else {
                         datasetDataIntegrity.innerText = 'not booked in blockchain';
