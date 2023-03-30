@@ -285,8 +285,8 @@ class DataValidationApplet {
             datasetDataIntegrity.style.backgroundColor = 'orange';
             datasetDataIntegrity.innerText = 'not checked yet';
 
-            let datasetTimeCreated = document.createElement('td');
-            datasetTimeCreated.innerText = 'time_created';
+            let datasetTimeRecorded = document.createElement('td');
+            datasetTimeRecorded.innerText = 'time_recorded';
 
             let datasetTimeSent = document.createElement('td');
             datasetTimeSent.innerText = 'time_sent';
@@ -337,7 +337,7 @@ class DataValidationApplet {
             datasetRoll.innerText = 'roll';
 
             newDatasetEntry.appendChild(datasetDataIntegrity);
-            newDatasetEntry.appendChild(datasetTimeCreated);
+            newDatasetEntry.appendChild(datasetTimeRecorded);
             newDatasetEntry.appendChild(datasetTimeSent);
             newDatasetEntry.appendChild(datasetTransactionUUID);
             newDatasetEntry.appendChild(datasetTCId);
@@ -363,7 +363,7 @@ class DataValidationApplet {
             const handleTrafficControlResponse = () => {
                 const response = JSON.parse(xhttpTrafficControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
-                    datasetTimeCreated.innerText = unixTimeToString(response['response_data']['time_created']);
+                    datasetTimeRecorded.innerText = unixTimeToString(response['response_data']['time_recorded']);
                     datasetTimeSent.innerText = unixTimeToString(response['response_data']['time_sent']);
                     datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
                     //datasetTCId.innerText = datasetId;
@@ -392,12 +392,11 @@ class DataValidationApplet {
                                 if (response['response_data'] != null) {
                                     const responseTransactionUUID = response['response_data']['transaction_uuid'];
                                     const responseTransactionData = JSON.parse(response['response_data']['transaction_data']);
-
                                     let allDataValid = true;
 
-                                    if (datasetTimeCreated.innerText != unixTimeToString(responseTransactionData['time_created'])) {
+                                    if (datasetTimeRecorded.innerText != unixTimeToString(responseTransactionData['data']['time_recorded'])) {
                                         allDataValid = false;
-                                        datasetTimeCreated.innerHTML = '<s>' + datasetTimeCreated.innerText + '</s> / <b>' + unixTimeToString(responseTransactionData['time_created']) + '</b>';
+                                        datasetTimeRecorded.innerHTML = '<s>' + datasetTimeRecorded.innerText + '</s> / <b>' + unixTimeToString(responseTransactionData['data']['time_recorded']) + '</b>';
                                     }
                                     if (datasetTimeSent.innerText != unixTimeToString(responseTransactionData['time_sent'])) {
                                         allDataValid = false;
@@ -522,8 +521,8 @@ class DataValidationApplet {
             datasetDataIntegrity.style.backgroundColor = 'orange';
             datasetDataIntegrity.innerText = 'not checked yet';
 
-            let datasetTimeCreated = document.createElement('td');
-            datasetTimeCreated.innerText = 'time_created'
+            let datasetTimeRecorded = document.createElement('td');
+            datasetTimeRecorded.innerText = 'time_recorded'
 
             let datasetTimeSent = document.createElement('td');
             datasetTimeSent.innerText = 'time_sent'
@@ -550,7 +549,7 @@ class DataValidationApplet {
             datasetRemainingFlightRadius.innerText = 'remaining_flight_radius';
 
             newDatasetEntry.appendChild(datasetDataIntegrity);
-            newDatasetEntry.appendChild(datasetTimeCreated);
+            newDatasetEntry.appendChild(datasetTimeRecorded);
             newDatasetEntry.appendChild(datasetTimeSent);
             newDatasetEntry.appendChild(datasetTransactionUUID);
             newDatasetEntry.appendChild(datasetTCId);
@@ -566,7 +565,7 @@ class DataValidationApplet {
             const handleTrafficControlResponse = () => {
                 const response = JSON.parse(xhttpTrafficControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
-                    datasetTimeCreated.innerText = unixTimeToString(response['response_data']['time_created']);
+                    datasetTimeRecorded.innerText = unixTimeToString(response['response_data']['time_recorded']);
                     datasetTimeSent.innerText = unixTimeToString(response['response_data']['time_sent']);
                     datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
                     //datasetTCId.innerText = datasetId;
@@ -590,9 +589,9 @@ class DataValidationApplet {
 
                                     let allDataValid = true;
 
-                                    if (datasetTimeCreated.innerText != unixTimeToString(responseTransactionData['time_created'])) {
+                                    if (datasetTimeRecorded.innerText != unixTimeToString(responseTransactionData['data']['time_recorded'])) {
                                         allDataValid = false;
-                                        datasetTimeCreated.innerHTML = '<s>' + datasetTimeCreated.innerText + '</s> / <b>' + unixTimeToString(responseTransactionData['time_created']) + '</b>';
+                                        datasetTimeRecorded.innerHTML = '<s>' + datasetTimeRecorded.innerText + '</s> / <b>' + unixTimeToString(responseTransactionData['data']['time_recorded']) + '</b>';
                                     }
                                     if (datasetTimeSent.innerText != unixTimeToString(responseTransactionData['time_sent'])) {
                                         allDataValid = false;
@@ -649,7 +648,10 @@ class DataValidationApplet {
                             datasetDataIntegrity.innerText = 'invalid response from C-Chain Link';
                             datasetDataIntegrity.style.backgroundColor = 'red';
                         };
-                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?transaction_uuid=' + transactionUUID + '&rand=' + new Date().getTime(), true);
+                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?'
+                                                    + 'chain_uuid=' + drones[this.#droneId].getChainUuidBlackbox()
+                                                    + '&transaction_uuid=' + transactionUUID
+                                                    + '&rand=' + new Date().getTime(), true);
                         xhttpCChainLink.send();
                     } else {
                         datasetDataIntegrity.innerText = 'not booked in blockchain';
@@ -682,8 +684,8 @@ class DataValidationApplet {
             datasetDataIntegrity.style.backgroundColor = 'orange';
             datasetDataIntegrity.innerText = 'not checked yet';
 
-            let datasetTimeCreated = document.createElement('td');
-            datasetTimeCreated.innerText = 'time_created';
+            let datasetTimeRecorded = document.createElement('td');
+            datasetTimeRecorded.innerText = 'time_recorded';
 
             let datasetTimeSent = document.createElement('td');
             datasetTimeSent.innerText = 'time_sent';
@@ -725,7 +727,7 @@ class DataValidationApplet {
             datasetOperationModes.innerText = 'operation_modes';
 
             newDatasetEntry.appendChild(datasetDataIntegrity);
-            newDatasetEntry.appendChild(datasetTimeCreated);
+            newDatasetEntry.appendChild(datasetTimeRecorded);
             newDatasetEntry.appendChild(datasetTimeSent);
             newDatasetEntry.appendChild(datasetTransactionUUID);
             newDatasetEntry.appendChild(datasetTCId);
@@ -746,7 +748,7 @@ class DataValidationApplet {
             const handleTrafficControlResponse = () => {
                 const response = JSON.parse(xhttpTrafficControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
-                    datasetTimeCreated.innerText = unixTimeToString(response['response_data']['time_created']);
+                    datasetTimeRecorded.innerText = unixTimeToString(response['response_data']['time_recorded']);
                     datasetTimeSent.innerText = unixTimeToString(response['response_data']['time_sent']);
                     datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
                     //datasetTCId.innerText = datasetId;
@@ -775,9 +777,9 @@ class DataValidationApplet {
 
                                     let allDataValid = true;
 
-                                    if (datasetTimeCreated.innerText != unixTimeToString(responseTransactionData['time_created'])) {
+                                    if (datasetTimeRecorded.innerText != unixTimeToString(responseTransactionData['data']['time_recorded'])) {
                                         allDataValid = false;
-                                        datasetTimeCreated.innerHTML = '<s>' + datasetTimeCreated.innerText + '</s> / <b>' + unixTimeToString(responseTransactionData['time_created']) + '</b>';
+                                        datasetTimeRecorded.innerHTML = '<s>' + datasetTimeRecorded.innerText + '</s> / <b>' + unixTimeToString(responseTransactionData['data']['time_recorded']) + '</b>';
                                     }
                                     if (datasetTimeSent.innerText != unixTimeToString(responseTransactionData['time_sent'])) {
                                         allDataValid = false;
@@ -854,7 +856,10 @@ class DataValidationApplet {
                             datasetDataIntegrity.innerText = 'invalid response from C-Chain Link';
                             datasetDataIntegrity.style.backgroundColor = 'red';
                         };
-                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?transaction_uuid=' + transactionUUID + '&rand=' + new Date().getTime(), true);
+                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?'
+                                                    + 'chain_uuid=' + drones[this.#droneId].getChainUuidBlackbox()
+                                                    + '&transaction_uuid=' + transactionUUID
+                                                    + '&rand=' + new Date().getTime(), true);
                         xhttpCChainLink.send();
                     } else {
                         datasetDataIntegrity.innerText = 'not booked in blockchain';
