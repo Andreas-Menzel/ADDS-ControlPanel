@@ -50,6 +50,28 @@ function toBoolean(stringValue) {
     }
 }
 
+// Function taken and adapted from https://stackoverflow.com/a/6078873
+function unixTimeToString(UNIX_timestamp){
+    let time = '';
+
+    if(UNIX_timestamp != null) {
+        let a = new Date(UNIX_timestamp * 1000);
+        let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        let year = a.getFullYear();
+        let month = months[a.getMonth()];
+        let date = a.getDate();
+        let hour = a.getHours();
+        let min = a.getMinutes();
+        let sec = a.getSeconds();
+        let mil = a.getMilliseconds();
+        time = date + '. ' + month + ' ' + year + ' - ' + hour + ':' + min + ':' + sec + '-' + mil;
+    } else {
+        time = '?';
+    }
+
+    return time;
+  }
+
 
 const useLiveData = true;
 const trafficControlUrl = 'http://adds-demo.an-men.de/';
