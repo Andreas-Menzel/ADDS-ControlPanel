@@ -54,7 +54,7 @@ function toBoolean(stringValue) {
 function unixTimeToString(UNIX_timestamp){
     let time = '';
 
-    if(UNIX_timestamp != null) {
+    if(UNIX_timestamp != null && UNIX_timestamp != 0) {
         let a = new Date(UNIX_timestamp * 1000);
         let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         let year = a.getFullYear();

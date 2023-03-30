@@ -363,8 +363,12 @@ class DataValidationApplet {
             const handleTrafficControlResponse = () => {
                 const response = JSON.parse(xhttpTrafficControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
-                    datasetTimeRecorded.innerText = unixTimeToString(response['response_data']['time_recorded']);
-                    datasetTimeSent.innerText = unixTimeToString(response['response_data']['time_sent']);
+                    const timeRecorded = response['response_data']['time_recorded'];
+                    const timeSent = response['response_data']['time_sent'];
+                    datasetTimeRecorded.innerText = unixTimeToString(timeRecorded);
+                    datasetTimeSent.innerText = unixTimeToString(timeSent);
+                    datasetTimeSent.title = '+' + Math.round((timeSent - timeRecorded) * 1000.0) / 1000.0 + 's'
+                    
                     datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
                     //datasetTCId.innerText = datasetId;
                     //datasetDroneId.innerText = response['response_data']['drone_id'];
@@ -565,8 +569,12 @@ class DataValidationApplet {
             const handleTrafficControlResponse = () => {
                 const response = JSON.parse(xhttpTrafficControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
-                    datasetTimeRecorded.innerText = unixTimeToString(response['response_data']['time_recorded']);
-                    datasetTimeSent.innerText = unixTimeToString(response['response_data']['time_sent']);
+                    const timeRecorded = response['response_data']['time_recorded'];
+                    const timeSent = response['response_data']['time_sent'];
+                    datasetTimeRecorded.innerText = unixTimeToString(timeRecorded);
+                    datasetTimeSent.innerText = unixTimeToString(timeSent);
+                    datasetTimeSent.title = '+' + Math.round((timeSent - timeRecorded) * 1000.0) / 1000.0 + 's'
+
                     datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
                     //datasetTCId.innerText = datasetId;
                     //datasetDroneId.innerText = response['response_data']['drone_id'];
@@ -748,8 +756,12 @@ class DataValidationApplet {
             const handleTrafficControlResponse = () => {
                 const response = JSON.parse(xhttpTrafficControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
-                    datasetTimeRecorded.innerText = unixTimeToString(response['response_data']['time_recorded']);
-                    datasetTimeSent.innerText = unixTimeToString(response['response_data']['time_sent']);
+                    const timeRecorded = response['response_data']['time_recorded'];
+                    const timeSent = response['response_data']['time_sent'];
+                    datasetTimeRecorded.innerText = unixTimeToString(timeRecorded);
+                    datasetTimeSent.innerText = unixTimeToString(timeSent);
+                    datasetTimeSent.title = '+' + Math.round((timeSent - timeRecorded) * 1000.0) / 1000.0 + 's'
+                    
                     datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
                     //datasetTCId.innerText = datasetId;
                     //datasetDroneId.innerText = response['response_data']['drone_id'];
