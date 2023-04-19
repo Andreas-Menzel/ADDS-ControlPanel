@@ -707,6 +707,9 @@ class DataValidationApplet {
             let datasetDroneId = document.createElement('td');
             datasetDroneId.innerText = this.#droneId;
 
+            let datasetOperationModes = document.createElement('td');
+            datasetOperationModes.innerText = 'operation_modes';
+
             let datasetTakeoffTime = document.createElement('td');
             datasetTakeoffTime.innerText = 'takeoff_time';
 
@@ -731,15 +734,13 @@ class DataValidationApplet {
             let datasetLandingGpsLon = document.createElement('td');
             datasetLandingGpsLon.innerText = 'landing_gps_lon';
 
-            let datasetOperationModes = document.createElement('td');
-            datasetOperationModes.innerText = 'operation_modes';
-
             newDatasetEntry.appendChild(datasetDataIntegrity);
             newDatasetEntry.appendChild(datasetTimeRecorded);
             newDatasetEntry.appendChild(datasetTimeSent);
             newDatasetEntry.appendChild(datasetTransactionUUID);
             newDatasetEntry.appendChild(datasetTCId);
             newDatasetEntry.appendChild(datasetDroneId);
+            newDatasetEntry.appendChild(datasetOperationModes);
             newDatasetEntry.appendChild(datasetTakeoffTime);
             newDatasetEntry.appendChild(datasetTakeoffGpsValid);
             newDatasetEntry.appendChild(datasetTakeoffGpsLat);
@@ -748,7 +749,6 @@ class DataValidationApplet {
             newDatasetEntry.appendChild(datasetLandingGpsValid);
             newDatasetEntry.appendChild(datasetLandingGpsLat);
             newDatasetEntry.appendChild(datasetLandingGpsLon);
-            newDatasetEntry.appendChild(datasetOperationModes);
 
             tableBody.appendChild(newDatasetEntry);
 
@@ -765,6 +765,7 @@ class DataValidationApplet {
                     datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
                     //datasetTCId.innerText = datasetId;
                     //datasetDroneId.innerText = response['response_data']['drone_id'];
+                    datasetOperationModes.innerText = response['response_data']['operation_modes'];
                     datasetTakeoffTime.innerText = response['response_data']['takeoff_time'];
                     datasetTakeoffGpsValid.innerText = response['response_data']['takeoff_gps_valid'] ? 'true' : 'false';
                     datasetTakeoffGpsLat.innerText = response['response_data']['takeoff_gps_lat'];
@@ -773,7 +774,6 @@ class DataValidationApplet {
                     datasetLandingGpsValid.innerText = response['response_data']['landing_gps_valid'] ? 'true' : 'false';
                     datasetLandingGpsLat.innerText = response['response_data']['landing_gps_lat'];
                     datasetLandingGpsLon.innerText = response['response_data']['landing_gps_lon'];
-                    datasetOperationModes.innerText = response['response_data']['operation_modes'];
 
                     const transactionUUID = response['response_data']['transaction_uuid']
                     if (transactionUUID != null && transactionUUID != '') {
@@ -804,6 +804,10 @@ class DataValidationApplet {
                                     if (datasetDroneId.innerText != responseTransactionData['drone_id']) {
                                         allDataValid = false;
                                         datasetDroneId.innerHTML = '<s>' + datasetDroneId.innerText + '</s> / <b>' + responseTransactionData['drone_id'] + '</b>';
+                                    }
+                                    if (datasetOperationModes.innerText != responseTransactionData['data']['operation_modes']) {
+                                        allDataValid = false;
+                                        datasetOperationModes.innerHTML = '<s>' + datasetOperationModes.innerText + '</s> / <b>' + responseTransactionData['data']['operation_modes'] + '</b>';
                                     }
                                     if (datasetTakeoffTime.innerText != responseTransactionData['data']['takeoff_time']) {
                                         allDataValid = false;
@@ -836,10 +840,6 @@ class DataValidationApplet {
                                     if (datasetLandingGpsLon.innerText != responseTransactionData['data']['landing_gps_lon']) {
                                         allDataValid = false;
                                         datasetLandingGpsLon.innerHTML = '<s>' + datasetLandingGpsLon.innerText + '</s> / <b>' + responseTransactionData['data']['landing_gps_lon'] + '</b>';
-                                    }
-                                    if (datasetOperationModes.innerText != responseTransactionData['data']['operation_modes']) {
-                                        allDataValid = false;
-                                        datasetOperationModes.innerHTML = '<s>' + datasetOperationModes.innerText + '</s> / <b>' + responseTransactionData['data']['operation_modes'] + '</b>';
                                     }
 
                                     if (allDataValid) {
