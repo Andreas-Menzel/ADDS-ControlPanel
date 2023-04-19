@@ -125,7 +125,7 @@ class Drone {
         };
         const xhttpAircraftLocation = new XMLHttpRequest();
         xhttpAircraftLocation.onload = () => { handleAircraftLocationResponse() };
-        xhttpAircraftLocation.open('GET', trafficControlUrl + 'ask/aircraft_location?payload=' + payloadAircraftLocation + '&rand=' + new Date().getTime(), true);
+        xhttpAircraftLocation.open('GET', flightControlUrl + 'ask/aircraft_location?payload=' + payloadAircraftLocation + '&rand=' + new Date().getTime(), true);
         xhttpAircraftLocation.send();
 
         // Update AircraftPower data
@@ -139,7 +139,7 @@ class Drone {
         };
         const xhttpAircraftPower = new XMLHttpRequest();
         xhttpAircraftPower.onload = () => { handleAircraftPowerResponse() };
-        xhttpAircraftPower.open('GET', trafficControlUrl + 'ask/aircraft_power?payload=' + payloadAircraftPower + '&rand=' + new Date().getTime(), true);
+        xhttpAircraftPower.open('GET', flightControlUrl + 'ask/aircraft_power?payload=' + payloadAircraftPower + '&rand=' + new Date().getTime(), true);
         xhttpAircraftPower.send();
 
         // Update FlightData data
@@ -153,7 +153,7 @@ class Drone {
         };
         const xhttpFlightData = new XMLHttpRequest();
         xhttpFlightData.onload = () => { handleFlightDataResponse() };
-        xhttpFlightData.open('GET', trafficControlUrl + 'ask/flight_data?payload=' + payloadFlightData + '&rand=' + new Date().getTime(), true);
+        xhttpFlightData.open('GET', flightControlUrl + 'ask/flight_data?payload=' + payloadFlightData + '&rand=' + new Date().getTime(), true);
         xhttpFlightData.send();
     }
 

@@ -7,7 +7,7 @@ takeoff / landing location, altitude, velocity, battery state of charge and
 much more. Show live-data or check flight parameters of previous flights with
 an interactive OSM map and simple data charts.
 
-**Note:** ADDS-TrafficControl is needed as the data management system.
+**Note:** ADDS-FlightControl is needed as the data management system.
 
 ## Setup
 
@@ -17,11 +17,11 @@ Clone the repository:
 git clone https://github.com/Andreas-Menzel/ADDS-ControlPanel.git
 ```
 
-Update the URL to your Traffic Control instance by changing the
-`trafficControlUrl` constant in `/app/js/main.js`:
+Update the URL to your Flight Control instance by changing the
+`flightControlUrl` constant in `/app/js/main.js`:
 
 ```javascript
-const trafficControlUrl = 'http://adds-demo.an-men.de/';
+const flightControlUrl = 'http://adds-demo.an-men.de/';
 ```
 
 Open the website (/app/index.html). Currently no server-side features are

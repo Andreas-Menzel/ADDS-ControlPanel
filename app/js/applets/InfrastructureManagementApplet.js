@@ -140,7 +140,7 @@ class InfrastructureManagementApplet {
                 };
                 const xhttp = new XMLHttpRequest();
                 xhttp.onload = () => { handleResponse() };
-                xhttp.open('GET', trafficControlUrl + 'ask/aircraft_location?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
+                xhttp.open('GET', flightControlUrl + 'ask/aircraft_location?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
                 xhttp.send();
             };
 
@@ -174,7 +174,7 @@ class InfrastructureManagementApplet {
                 };
                 const xhttp = new XMLHttpRequest();
                 xhttp.onload = () => { handleResponse() };
-                xhttp.open('GET', trafficControlUrl + 'tell/delete_intersection?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
+                xhttp.open('GET', flightControlUrl + 'tell/delete_intersection?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
                 xhttp.send();
             };
 
@@ -219,7 +219,7 @@ class InfrastructureManagementApplet {
                 };
                 const xhttp = new XMLHttpRequest();
                 xhttp.onload = () => { handleResponse() };
-                xhttp.open('GET', trafficControlUrl + 'tell/intersection_location?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
+                xhttp.open('GET', flightControlUrl + 'tell/intersection_location?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
                 xhttp.send();
             };
 
@@ -356,7 +356,7 @@ class InfrastructureManagementApplet {
                 };
                 const xhttp = new XMLHttpRequest();
                 xhttp.onload = () => { handleResponse() };
-                xhttp.open('GET', trafficControlUrl + 'tell/delete_corridor?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
+                xhttp.open('GET', flightControlUrl + 'tell/delete_corridor?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
                 xhttp.send();
             };
 
@@ -400,7 +400,7 @@ class InfrastructureManagementApplet {
                 };
                 const xhttp = new XMLHttpRequest();
                 xhttp.onload = () => { handleResponse() };
-                xhttp.open('GET', trafficControlUrl + 'tell/corridor_location?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
+                xhttp.open('GET', flightControlUrl + 'tell/corridor_location?payload=' + JSON.stringify(payload) + '&rand=' + new Date().getTime(), true);
                 xhttp.send();
             };
 

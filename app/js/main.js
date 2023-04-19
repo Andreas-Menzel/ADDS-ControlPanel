@@ -74,7 +74,7 @@ function unixTimeToString(UNIX_timestamp){
 
 
 const useLiveData = true;
-const trafficControlUrl = 'http://adds-demo.an-men.de/';
+const flightControlUrl = 'http://adds-demo.an-men.de/';
 const cChainLinkUrl = 'http://adds-demo.an-men.de:8080/';
 
 let timeOffset = 0;
@@ -126,7 +126,7 @@ function updateDroneList() {
     };
     const xhttp = new XMLHttpRequest();
     xhttp.onload = () => { handleResponse() };
-    xhttp.open('GET', trafficControlUrl + 'ask/drone_list?payload=' + payload, true);
+    xhttp.open('GET', flightControlUrl + 'ask/drone_list?payload=' + payload, true);
     xhttp.send();
 }
 
@@ -161,7 +161,7 @@ function updateIntersectionList() {
     };
     const xhttp = new XMLHttpRequest();
     xhttp.onload = () => { handleResponse() };
-    xhttp.open('GET', trafficControlUrl + 'ask/intersection_list?payload=' + payload, true);
+    xhttp.open('GET', flightControlUrl + 'ask/intersection_list?payload=' + payload, true);
     xhttp.send();
 }
 
@@ -195,7 +195,7 @@ function updateCorridorList() {
     };
     const xhttp = new XMLHttpRequest();
     xhttp.onload = () => { handleResponse() };
-    xhttp.open('GET', trafficControlUrl + 'ask/corridor_list?payload=' + payload, true);
+    xhttp.open('GET', flightControlUrl + 'ask/corridor_list?payload=' + payload, true);
     xhttp.send();
 }
 

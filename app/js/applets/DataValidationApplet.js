@@ -152,7 +152,7 @@ class DataValidationApplet {
         };
         const xhttp = new XMLHttpRequest();
         xhttp.onload = () => { handleResponse() };
-        xhttp.open('GET', trafficControlUrl + 'ask/drone_ids?payload=' + payload + '&rand=' + new Date().getTime(), true);
+        xhttp.open('GET', flightControlUrl + 'ask/drone_ids?payload=' + payload + '&rand=' + new Date().getTime(), true);
         xhttp.send();
     }
 
@@ -168,17 +168,17 @@ class DataValidationApplet {
         let idRangeSelectedMin = -1;
         let idRangeSelectedMax = -1;
         if (this.#dataVisible == 'AircraftLocation') {
-            requestUrl = trafficControlUrl + 'ask/aircraft_location_ids';
+            requestUrl = flightControlUrl + 'ask/aircraft_location_ids';
             payload = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_location_ids"}';
             idRangeSelectedMin = this.#aircraftLocationIdRangeSelectedMin;
             idRangeSelectedMax = this.#aircraftLocationIdRangeSelectedMax;
         } else if (this.#dataVisible == 'AircraftPower') {
-            requestUrl = trafficControlUrl + 'ask/aircraft_power_ids';
+            requestUrl = flightControlUrl + 'ask/aircraft_power_ids';
             payload = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_power_ids"}';
             idRangeSelectedMin = this.#aircraftPowerIdRangeSelectedMin;
             idRangeSelectedMax = this.#aircraftPowerIdRangeSelectedMax;
         } else if (this.#dataVisible == 'FlightData') {
-            requestUrl = trafficControlUrl + 'ask/flight_data_ids';
+            requestUrl = flightControlUrl + 'ask/flight_data_ids';
             payload = '{"drone_id": "' + this.#droneId + '","data_type": "flight_data_ids"}';
             idRangeSelectedMin = this.#flightDataIdRangeSelectedMin;
             idRangeSelectedMax = this.#flightDataIdRangeSelectedMax;
@@ -359,9 +359,9 @@ class DataValidationApplet {
 
 
             // Update AircraftLocation data
-            const payloadTrafficControl = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_location", "data": {"data_id": ' + datasetId + '}}';
-            const handleTrafficControlResponse = () => {
-                const response = JSON.parse(xhttpTrafficControl.responseText);
+            const payloadFlightControl = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_location", "data": {"data_id": ' + datasetId + '}}';
+            const handleFlightControlResponse = () => {
+                const response = JSON.parse(xhttpFlightControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
                     const timeRecorded = response['response_data']['time_recorded'];
                     const timeSent = response['response_data']['time_sent'];
@@ -500,10 +500,10 @@ class DataValidationApplet {
                     }
                 }
             };
-            const xhttpTrafficControl = new XMLHttpRequest();
-            xhttpTrafficControl.onload = () => { handleTrafficControlResponse() };
-            xhttpTrafficControl.open('GET', trafficControlUrl + 'ask/aircraft_location?payload=' + payloadTrafficControl + '&rand=' + new Date().getTime(), true);
-            xhttpTrafficControl.send();
+            const xhttpFlightControl = new XMLHttpRequest();
+            xhttpFlightControl.onload = () => { handleFlightControlResponse() };
+            xhttpFlightControl.open('GET', flightControlUrl + 'ask/aircraft_location?payload=' + payloadFlightControl + '&rand=' + new Date().getTime(), true);
+            xhttpFlightControl.send();
         }
     }
 
@@ -565,9 +565,9 @@ class DataValidationApplet {
 
             tableBody.appendChild(newDatasetEntry);
 
-            const payloadTrafficControl = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_power", "data": {"data_id": ' + datasetId + '}}';
-            const handleTrafficControlResponse = () => {
-                const response = JSON.parse(xhttpTrafficControl.responseText);
+            const payloadFlightControl = '{"drone_id": "' + this.#droneId + '","data_type": "aircraft_power", "data": {"data_id": ' + datasetId + '}}';
+            const handleFlightControlResponse = () => {
+                const response = JSON.parse(xhttpFlightControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
                     const timeRecorded = response['response_data']['time_recorded'];
                     const timeSent = response['response_data']['time_sent'];
@@ -667,10 +667,10 @@ class DataValidationApplet {
                     }
                 }
             };
-            const xhttpTrafficControl = new XMLHttpRequest();
-            xhttpTrafficControl.onload = () => { handleTrafficControlResponse() };
-            xhttpTrafficControl.open('GET', trafficControlUrl + 'ask/aircraft_power?payload=' + payloadTrafficControl + '&rand=' + new Date().getTime(), true);
-            xhttpTrafficControl.send();
+            const xhttpFlightControl = new XMLHttpRequest();
+            xhttpFlightControl.onload = () => { handleFlightControlResponse() };
+            xhttpFlightControl.open('GET', flightControlUrl + 'ask/aircraft_power?payload=' + payloadFlightControl + '&rand=' + new Date().getTime(), true);
+            xhttpFlightControl.send();
         }
     }
 
@@ -752,9 +752,9 @@ class DataValidationApplet {
 
             tableBody.appendChild(newDatasetEntry);
 
-            const payloadTrafficControl = '{"drone_id": "' + this.#droneId + '","data_type": "flight_data", "data": {"data_id": ' + datasetId + '}}';
-            const handleTrafficControlResponse = () => {
-                const response = JSON.parse(xhttpTrafficControl.responseText);
+            const payloadFlightControl = '{"drone_id": "' + this.#droneId + '","data_type": "flight_data", "data": {"data_id": ' + datasetId + '}}';
+            const handleFlightControlResponse = () => {
+                const response = JSON.parse(xhttpFlightControl.responseText);
                 if (response['executed'] && response['response_data'] != null) {
                     const timeRecorded = response['response_data']['time_recorded'];
                     const timeSent = response['response_data']['time_sent'];
@@ -879,10 +879,10 @@ class DataValidationApplet {
                     }
                 }
             };
-            const xhttpTrafficControl = new XMLHttpRequest();
-            xhttpTrafficControl.onload = () => { handleTrafficControlResponse() };
-            xhttpTrafficControl.open('GET', trafficControlUrl + 'ask/flight_data?payload=' + payloadTrafficControl + '&rand=' + new Date().getTime(), true);
-            xhttpTrafficControl.send();
+            const xhttpFlightControl = new XMLHttpRequest();
+            xhttpFlightControl.onload = () => { handleFlightControlResponse() };
+            xhttpFlightControl.open('GET', flightControlUrl + 'ask/flight_data?payload=' + payloadFlightControl + '&rand=' + new Date().getTime(), true);
+            xhttpFlightControl.send();
         }
     }
 
