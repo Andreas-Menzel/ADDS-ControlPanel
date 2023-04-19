@@ -74,8 +74,8 @@ function unixTimeToString(UNIX_timestamp){
 
 
 const useLiveData = true;
-const flightControlUrl = 'http://adds-demo.an-men.de/';
-const cChainLinkUrl = 'http://adds-demo.an-men.de:8080/';
+const flightControlUrl = 'http://adds-demo.an-men.de:2000/';
+const cChainLinkUrl = 'http://adds-demo.an-men.de:2001/';
 
 let timeOffset = 0;
 
