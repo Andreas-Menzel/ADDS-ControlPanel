@@ -16,6 +16,10 @@ class DataValidationApplet {
     #flightDataIdRangeSelectedMax = 0;
     #flightDataIdRangeSelectionIndex = 0;
 
+    #missionDataIdRangeSelectedMin = 0;
+    #missionDataIdRangeSelectedMax = 0;
+    #missionDataIdRangeSelectionIndex = 0;
+
     #droneIdsAvailable = [];
 
 
@@ -31,6 +35,7 @@ class DataValidationApplet {
         const btnShowAircraftLocation = document.getElementsByClassName('btn_dataValidationApplet_showAircraftLocation')[0];
         const btnShowAircraftPower = document.getElementsByClassName('btn_dataValidationApplet_showAircraftPower')[0];
         const btnShowFlightData = document.getElementsByClassName('btn_dataValidationApplet_showFlightData')[0];
+        const btnShowMissionData = document.getElementsByClassName('btn_dataValidationApplet_showMissionData')[0];
 
         const droneIdSelector = document.getElementsByClassName('dataValidationApplet_droneIdSelector')[0];
         const datasetIdRangeSelector = document.getElementsByClassName('dataValidationApplet_datasetIdRangeSelector')[0];
@@ -53,6 +58,12 @@ class DataValidationApplet {
             this.#updateIdRangeSelector(true, true);
             this.#updateDatasetTableVisibility();
         });
+        btnShowMissionData.addEventListener('click', () => {
+            this.#dataVisible = 'MissionData';
+            this.#updateButtons();
+            this.#updateIdRangeSelector(true, true);
+            this.#updateDatasetTableVisibility();
+        });
 
         droneIdSelector.addEventListener('change', () => {
             this.#aircraftLocationIdRangeSelectionIndex = 0;
@@ -68,6 +79,8 @@ class DataValidationApplet {
                 this.#aircraftPowerIdRangeSelectionIndex = datasetIdRangeSelector.selectedIndex;
             } else if (this.#dataVisible == 'FlightData') {
                 this.#flightDataIdRangeSelectionIndex = datasetIdRangeSelector.selectedIndex;
+            } else if (this.#dataVisible == 'MissionData') {
+                this.#missionDataIdRangeSelectionIndex = datasetIdRangeSelector.selectedIndex;
             }
 
             this.#updateDatasetTableData();
@@ -79,19 +92,28 @@ class DataValidationApplet {
         const btnShowAircraftLocation = document.getElementsByClassName('btn_dataValidationApplet_showAircraftLocation')[0];
         const btnShowAircraftPower = document.getElementsByClassName('btn_dataValidationApplet_showAircraftPower')[0];
         const btnShowFlightData = document.getElementsByClassName('btn_dataValidationApplet_showFlightData')[0];
+        const btnShowMissionData = document.getElementsByClassName('btn_dataValidationApplet_showMissionData')[0];
 
         if (this.#dataVisible == 'AircraftLocation') {
             btnShowAircraftLocation.classList.add('buttonActive');
             btnShowAircraftPower.classList.remove('buttonActive');
             btnShowFlightData.classList.remove('buttonActive');
+            btnShowMissionData.classList.remove('buttonActive');
         } else if (this.#dataVisible == 'AircraftPower') {
             btnShowAircraftLocation.classList.remove('buttonActive');
             btnShowAircraftPower.classList.add('buttonActive');
             btnShowFlightData.classList.remove('buttonActive');
+            btnShowMissionData.classList.remove('buttonActive');
         } else if (this.#dataVisible == 'FlightData') {
             btnShowAircraftLocation.classList.remove('buttonActive');
             btnShowAircraftPower.classList.remove('buttonActive');
             btnShowFlightData.classList.add('buttonActive');
+            btnShowMissionData.classList.remove('buttonActive');
+        } else if (this.#dataVisible == 'MissionData') {
+            btnShowAircraftLocation.classList.remove('buttonActive');
+            btnShowAircraftPower.classList.remove('buttonActive');
+            btnShowFlightData.classList.remove('buttonActive');
+            btnShowMissionData.classList.add('buttonActive');
         }
     }
 
@@ -99,19 +121,28 @@ class DataValidationApplet {
         const aircraftLocationTableWrapper = document.getElementsByClassName('dataValidationApplet_aircraftLocationTableWrapper')[0];
         const aircraftPowerTableWrapper = document.getElementsByClassName('dataValidationApplet_aircraftPowerTableWrapper')[0];
         const flightDataTableWrapper = document.getElementsByClassName('dataValidationApplet_flightDataTableWrapper')[0];
+        const missionDataTableWrapper = document.getElementsByClassName('dataValidationApplet_missionDataTableWrapper')[0];
 
         if (this.#dataVisible == 'AircraftLocation') {
             aircraftLocationTableWrapper.style.display = 'block';
             aircraftPowerTableWrapper.style.display = 'none';
             flightDataTableWrapper.style.display = 'none';
+            missionDataTableWrapper.style.display = 'none';
         } else if (this.#dataVisible == 'AircraftPower') {
             aircraftLocationTableWrapper.style.display = 'none';
             aircraftPowerTableWrapper.style.display = 'block';
             flightDataTableWrapper.style.display = 'none';
+            missionDataTableWrapper.style.display = 'none';
         } else if (this.#dataVisible == 'FlightData') {
             aircraftLocationTableWrapper.style.display = 'none';
             aircraftPowerTableWrapper.style.display = 'none';
             flightDataTableWrapper.style.display = 'block';
+            missionDataTableWrapper.style.display = 'none';
+        } else if (this.#dataVisible == 'MissionData') {
+            aircraftLocationTableWrapper.style.display = 'none';
+            aircraftPowerTableWrapper.style.display = 'none';
+            flightDataTableWrapper.style.display = 'none';
+            missionDataTableWrapper.style.display = 'block';
         }
     }
 
@@ -182,6 +213,11 @@ class DataValidationApplet {
             payload = '{"drone_id": "' + this.#droneId + '","data_type": "flight_data_ids"}';
             idRangeSelectedMin = this.#flightDataIdRangeSelectedMin;
             idRangeSelectedMax = this.#flightDataIdRangeSelectedMax;
+        } else if (this.#dataVisible == 'MissionData') {
+            requestUrl = flightControlUrl + 'ask/mission_data_ids';
+            payload = '{"drone_id": "' + this.#droneId + '","data_type": "mission_data_ids"}';
+            idRangeSelectedMin = this.#missionDataIdRangeSelectedMin;
+            idRangeSelectedMax = this.#missionDataIdRangeSelectedMax;
         }
 
         const handleResponse = () => {
@@ -208,6 +244,9 @@ class DataValidationApplet {
                 } else if (this.#dataVisible == 'FlightData') {
                     this.#flightDataIdRangeSelectedMin = idMin;
                     this.#flightDataIdRangeSelectedMax = idMax;
+                } else if (this.#dataVisible == 'MissionData') {
+                    this.#missionDataIdRangeSelectedMin = idMin;
+                    this.#missionDataIdRangeSelectedMax = idMax;
                 }
 
                 datasetIdRangeSelector.innerHTML = '';
@@ -233,6 +272,10 @@ class DataValidationApplet {
                         }
                     } else if (this.#dataVisible == 'FlightData') {
                         if (i / datasetsPerPage == this.#flightDataIdRangeSelectionIndex) {
+                            newOption.selected = 'true';
+                        }
+                    } else if (this.#dataVisible == 'MissionData') {
+                        if (i / datasetsPerPage == this.#missionDataIdRangeSelectionIndex) {
                             newOption.selected = 'true';
                         }
                     }
@@ -264,6 +307,8 @@ class DataValidationApplet {
             this.#updateDatasetTableDataAircraftPower();
         } else if (this.#dataVisible == 'FlightData') {
             this.#updateDatasetTableDataFlightData();
+        } else if (this.#dataVisible == 'MissionData') {
+            this.#updateDatasetTableDataMissionData();
         }
     }
 
@@ -882,6 +927,209 @@ class DataValidationApplet {
             const xhttpFlightControl = new XMLHttpRequest();
             xhttpFlightControl.onload = () => { handleFlightControlResponse() };
             xhttpFlightControl.open('GET', flightControlUrl + 'ask/flight_data?payload=' + payloadFlightControl + '&rand=' + new Date().getTime(), true);
+            xhttpFlightControl.send();
+        }
+    }
+
+    #updateDatasetTableDataMissionData() {
+        const datasetIdRangeSelecor = document.getElementsByClassName('dataValidationApplet_datasetIdRangeSelector')[0];
+
+        const missionDataTableWrapper = document.getElementsByClassName('dataValidationApplet_missionDataTableWrapper')[0];
+
+        const tableBody = missionDataTableWrapper.querySelectorAll('tbody')[0];
+        tableBody.innerHTML = '';
+
+
+        const datasetMinId = parseInt(datasetIdRangeSelecor.options[this.#missionDataIdRangeSelectionIndex].dataset.min_id);
+        const datasetMaxId = parseInt(datasetIdRangeSelecor.options[this.#missionDataIdRangeSelectionIndex].dataset.max_id);
+        for (let datasetId = datasetMinId; datasetId <= datasetMaxId; datasetId++) {
+            let newDatasetEntry = document.createElement('tr');
+
+            let datasetDataIntegrity = document.createElement('td');
+            datasetDataIntegrity.style.backgroundColor = 'orange';
+            datasetDataIntegrity.innerText = 'not checked yet';
+
+            let datasetTimeRecorded = document.createElement('td');
+            datasetTimeRecorded.innerText = 'time_recorded';
+
+            let datasetTimeSent = document.createElement('td');
+            datasetTimeSent.innerText = 'time_sent';
+
+            let datasetTransactionUUID = document.createElement('td');
+            datasetTransactionUUID.innerText = 'transaction_uuid';
+
+            let datasetTCId = document.createElement('td');
+            datasetTCId.innerText = datasetId;
+
+            let datasetDroneId = document.createElement('td');
+            datasetDroneId.innerText = this.#droneId;
+
+            let datasetStartIntersection = document.createElement('td');
+            datasetStartIntersection.innerText = 'start_intersection';
+
+            let datasetLastUploadedIntersection = document.createElement('td');
+            datasetLastUploadedIntersection.innerText = 'last_uploaded_intersection';
+
+            let datasetLastMissionIntersection = document.createElement('td');
+            datasetLastMissionIntersection.innerText = 'last_mission_intersection';
+
+            let datasetLandAfterMissionFinished = document.createElement('td');
+            datasetLandAfterMissionFinished.innerText = 'land_after_mission_finished';
+
+            let datasetCorridorsPending = document.createElement('td');
+            datasetCorridorsPending.innerText = 'corridors_pending';
+
+            let datasetCorridorsApproved = document.createElement('td');
+            datasetCorridorsApproved.innerText = 'corridors_approved';
+
+            let datasetCorridorsUploaded = document.createElement('td');
+            datasetCorridorsUploaded.innerText = 'corridors_uploaded';
+
+            let datasetCorridorsFinished = document.createElement('td');
+            datasetCorridorsFinished.innerText = 'corridors_finished';
+
+            newDatasetEntry.appendChild(datasetDataIntegrity);
+            newDatasetEntry.appendChild(datasetTimeRecorded);
+            newDatasetEntry.appendChild(datasetTimeSent);
+            newDatasetEntry.appendChild(datasetTransactionUUID);
+            newDatasetEntry.appendChild(datasetTCId);
+            newDatasetEntry.appendChild(datasetDroneId);
+            newDatasetEntry.appendChild(datasetStartIntersection);
+            newDatasetEntry.appendChild(datasetLastUploadedIntersection);
+            newDatasetEntry.appendChild(datasetLastMissionIntersection);
+            newDatasetEntry.appendChild(datasetLandAfterMissionFinished);
+            newDatasetEntry.appendChild(datasetCorridorsPending);
+            newDatasetEntry.appendChild(datasetCorridorsApproved);
+            newDatasetEntry.appendChild(datasetCorridorsUploaded);
+            newDatasetEntry.appendChild(datasetCorridorsFinished);
+
+            tableBody.appendChild(newDatasetEntry);
+
+            const payloadFlightControl = '{"drone_id": "' + this.#droneId + '","data_type": "mission_data", "data": {"data_id": ' + datasetId + '}}';
+            const handleFlightControlResponse = () => {
+                const response = JSON.parse(xhttpFlightControl.responseText);
+                if (response['executed'] && response['response_data'] != null) {
+                    const timeRecorded = response['response_data']['time_recorded'];
+                    const timeSent = response['response_data']['time_sent'];
+                    datasetTimeRecorded.innerText = unixTimeToString(timeRecorded);
+                    datasetTimeSent.innerText = unixTimeToString(timeSent);
+                    datasetTimeSent.title = '+' + Math.round((timeSent - timeRecorded) * 1000.0) / 1000.0 + 's'
+                    
+                    datasetTransactionUUID.innerText = response['response_data']['transaction_uuid'];
+                    //datasetTCId.innerText = datasetId;
+                    //datasetDroneId.innerText = response['response_data']['drone_id'];
+                    datasetStartIntersection.innerText = response['response_data']['start_intersection'];
+                    datasetLastUploadedIntersection.innerText = response['response_data']['last_uploaded_intersection'];
+                    datasetLastMissionIntersection.innerText = response['response_data']['last_mission_intersection'];
+                    datasetLandAfterMissionFinished.innerText = response['response_data']['land_after_mission_finished'];
+                    datasetCorridorsPending.innerText = response['response_data']['corridors_pending'];
+                    datasetCorridorsApproved.innerText = response['response_data']['corridors_approved'];
+                    datasetCorridorsUploaded.innerText = response['response_data']['corridors_uploaded'];
+                    datasetCorridorsFinished.innerText = response['response_data']['corridors_finished'];
+
+                    const transactionUUID = response['response_data']['transaction_uuid']
+                    if (transactionUUID != null && transactionUUID != '') {
+                        datasetDataIntegrity.innerText = 'checking...';
+
+                        const handleCChainLinkResponse = () => {
+                            const response = JSON.parse(xhttpCChainLink.response);
+
+                            if (response['executed']) {
+                                if (response['response_data'] != null) {
+                                    const responseTransactionUUID = response['response_data']['transaction_uuid'];
+                                    const responseTransactionData = JSON.parse(response['response_data']['transaction_data']);
+
+                                    let allDataValid = true;
+
+                                    if (datasetTimeRecorded.innerText != unixTimeToString(responseTransactionData['data']['time_recorded'])) {
+                                        allDataValid = false;
+                                        datasetTimeRecorded.innerHTML = '<s>' + datasetTimeRecorded.innerText + '</s> / <b>' + unixTimeToString(responseTransactionData['data']['time_recorded']) + '</b>';
+                                    }
+                                    if (datasetTimeSent.innerText != unixTimeToString(responseTransactionData['time_sent'])) {
+                                        allDataValid = false;
+                                        datasetTimeSent.innerHTML = '<s>' + datasetTimeSent.innerText + '</s> / <b>' + unixTimeToString(responseTransactionData['time_sent']) + '</b>';
+                                    }
+                                    if (datasetTransactionUUID.innerText != responseTransactionUUID) {
+                                        allDataValid = false;
+                                        datasetTransactionUUID.innerHTML = '<s>' + datasetTransactionUUID.innerText + '</s> / <b>' + responseTransactionUUID + '</b>';
+                                    }
+                                    if (datasetDroneId.innerText != responseTransactionData['drone_id']) {
+                                        allDataValid = false;
+                                        datasetDroneId.innerHTML = '<s>' + datasetDroneId.innerText + '</s> / <b>' + responseTransactionData['drone_id'] + '</b>';
+                                    }
+                                    if (datasetStartIntersection.innerText != responseTransactionData['data']['start_intersection']) {
+                                        allDataValid = false;
+                                        datasetStartIntersection.innerHTML = '<s>' + datasetStartIntersection.innerText + '</s> / <b>' + responseTransactionData['data']['start_intersection'] + '</b>';
+                                    }
+                                    if (datasetLastUploadedIntersection.innerText != responseTransactionData['data']['last_uploaded_intersection']) {
+                                        allDataValid = false;
+                                        datasetLastUploadedIntersection.innerHTML = '<s>' + datasetLastUploadedIntersection.innerText + '</s> / <b>' + responseTransactionData['data']['last_uploaded_intersection'] + '</b>';
+                                    }
+                                    if (datasetLastMissionIntersection.innerText != responseTransactionData['data']['last_mission_intersection']) {
+                                        allDataValid = false;
+                                        datasetLastMissionIntersection.innerHTML = '<s>' + datasetLastMissionIntersection.innerText + '</s> / <b>' + responseTransactionData['data']['last_mission_intersection'] + '</b>';
+                                    }
+                                    if (toBoolean(datasetLandAfterMissionFinished.innerText) != responseTransactionData['data']['land_after_mission_finished']) {
+                                        allDataValid = false;
+                                        datasetLandAfterMissionFinished.innerHTML = '<s>' + datasetLandAfterMissionFinished.innerText + '</s> / <b>' + responseTransactionData['data']['land_after_mission_finished'] + '</b>';
+                                    }
+                                    if (datasetCorridorsPending.innerText != responseTransactionData['data']['corridors_pending']) {
+                                        allDataValid = false;
+                                        datasetCorridorsPending.innerHTML = '<s>' + datasetCorridorsPending.innerText + '</s> / <b>' + responseTransactionData['data']['corridors_pending'] + '</b>';
+                                    }
+                                    if (datasetCorridorsApproved.innerText != responseTransactionData['data']['corridors_approved']) {
+                                        allDataValid = false;
+                                        datasetCorridorsApproved.innerHTML = '<s>' + datasetCorridorsApproved.innerText + '</s> / <b>' + responseTransactionData['data']['corridors_approved'] + '</b>';
+                                    }
+                                    if (datasetCorridorsUploaded.innerText != responseTransactionData['data']['corridors_uploaded']) {
+                                        allDataValid = false;
+                                        datasetCorridorsUploaded.innerHTML = '<s>' + datasetCorridorsUploaded.innerText + '</s> / <b>' + responseTransactionData['data']['corridors_uploaded'] + '</b>';
+                                    }
+                                    if (datasetCorridorsFinished.innerText != responseTransactionData['data']['corridors_finished']) {
+                                        allDataValid = false;
+                                        datasetCorridorsFinished.innerHTML = '<s>' + datasetCorridorsFinished.innerText + '</s> / <b>' + responseTransactionData['data']['corridors_finished'] + '</b>';
+                                    }
+
+                                    if (allDataValid) {
+                                        datasetDataIntegrity.innerText = 'OK';
+                                        datasetDataIntegrity.style.backgroundColor = 'green';
+                                    } else {
+                                        datasetDataIntegrity.innerText = 'DATA MANIPULATED';
+                                        datasetDataIntegrity.style.backgroundColor = 'red';
+                                    }
+                                }
+                            } else {
+                                datasetDataIntegrity.innerText = 'ERROR';
+                                // TODO: Show errors & warnings (on hover?)
+                                datasetDataIntegrity.style.backgroundColor = 'red';
+                            }
+                        };
+
+                        const xhttpCChainLink = new XMLHttpRequest();
+                        xhttpCChainLink.onload = () => { handleCChainLinkResponse() };
+                        xhttpCChainLink.timeout = 5000;
+                        xhttpCChainLink.ontimeout = (e) => {
+                            datasetDataIntegrity.innerText = 'C-Chain Link unreachable';
+                            datasetDataIntegrity.style.backgroundColor = 'red';
+                        };
+                        xhttpCChainLink.onerror = (e) => {
+                            datasetDataIntegrity.innerText = 'invalid response from C-Chain Link';
+                            datasetDataIntegrity.style.backgroundColor = 'red';
+                        };
+                        xhttpCChainLink.open('GET', cChainLinkUrl + 'get_data?'
+                                                    + 'chain_uuid=' + drones[this.#droneId].getChainUuidMission()
+                                                    + '&transaction_uuid=' + transactionUUID
+                                                    + '&rand=' + new Date().getTime(), true);
+                        xhttpCChainLink.send();
+                    } else {
+                        datasetDataIntegrity.innerText = 'not booked in blockchain';
+                        datasetDataIntegrity.style.backgroundColor = 'red';
+                    }
+                }
+            };
+            const xhttpFlightControl = new XMLHttpRequest();
+            xhttpFlightControl.onload = () => { handleFlightControlResponse() };
+            xhttpFlightControl.open('GET', flightControlUrl + 'ask/mission_data?payload=' + payloadFlightControl + '&rand=' + new Date().getTime(), true);
             xhttpFlightControl.send();
         }
     }

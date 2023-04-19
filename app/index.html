@@ -35,6 +35,7 @@
                         Location</button>
                     <button class="btn_dataValidationApplet_showAircraftPower standardButton">Aircraft Power</button>
                     <button class="btn_dataValidationApplet_showFlightData standardButton">Flight data</button>
+                    <button class="btn_dataValidationApplet_showMissionData standardButton">Mission data</button>
                 </div>
                 <div class="controlPanelLine" style="margin-top: 0.5rem;">
                     <select class="dataValidationApplet_droneIdSelector"></select>
@@ -112,6 +113,32 @@
                                 <th>landing_gps_valid</th>
                                 <th>landing_gps_lat</th>
                                 <th>landing_gps_lon</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dataValidationApplet_missionDataTableWrapper" style="display:none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>data integrity</th>
+                                <th>time_recorded</th>
+                                <th>time_sent</th>
+                                <th>transaction_uuid</th>
+                                <th>Dataset ID (Flight Control)</th>
+                                <th>drone_id</th>
+                                <th>start_intersection</th>
+                                <th>last_uploaded_intersection</th>
+                                <th>last_mission_intersection</th>
+                                <th>land_after_mission_finished</th>
+                                <th>corridors_pending</th>
+                                <th>corridors_approved</th>
+                                <th>corridors_uploaded</th>
+                                <th>corridors_finished</th>
                             </tr>
                         </thead>
                         <tbody>
