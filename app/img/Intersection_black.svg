@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="20"
+   height="20"
+   viewBox="0 0 5.2916665 5.2916666"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="../intersection.svg"
+   inkscape:export-xdpi="95.3"
+   inkscape:export-ydpi="95.3"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="intersection.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="45.254834"
+     inkscape:cx="7.3030872"
+     inkscape:cy="11.092738"
+     inkscape:window-width="2560"
+     inkscape:window-height="1403"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="opacity:1;fill:black;stroke-width:0;stroke-linejoin:round"
+       id="path641"
+       cx="2.6458333"
+       cy="2.6458333"
+       r="2.6458333" />
+    <rect
+       style="opacity:1;fill:#ffffff;stroke-width:0;stroke-linejoin:round"
+       id="rect333"
+       width="6.236289"
+       height="1.2472577"
+       x="0.62362885"
+       y="-0.62362885"
+       transform="rotate(44.999999)" />
+    <rect
+       style="fill:#ffffff;stroke-width:0;stroke-linejoin:round"
+       id="rect333-3"
+       width="6.236289"
+       height="1.2472577"
+       x="-3.1181445"
+       y="3.1181445"
+       transform="rotate(-44.999999)" />
+  </g>
+</svg>

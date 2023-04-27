@@ -1,7 +1,8 @@
 class Intersection {
 
-    #imageSource = './img/intersection.svg';
-    #imageScale = 1;
+    #imageSourceName = './img/Intersection_';
+    #imageSourceFileType = '.svg';
+    #imageScale = 1.2;
 
     #id;
 
@@ -11,6 +12,8 @@ class Intersection {
     #gpsLon;
 
     #altitude;
+
+    #lockedBy;
 
 
     constructor(id) {
@@ -26,21 +29,25 @@ class Intersection {
         this.#gpsLon = 0;
 
         this.#altitude = 0;
+
+        this.#lockedBy = null;
     }
 
 
-    setValues(gpsLat, gpsLon, altitude) {
+    setValues(gpsLat, gpsLon, altitude, lockedBy) {
         this.#dataValid = true;
 
         this.#gpsLat = gpsLat;
         this.#gpsLon = gpsLon;
 
         this.#altitude = altitude;
+
+        this.#lockedBy = lockedBy;
     }
 
 
-    getImageSource() {
-        return this.#imageSource;
+    getImageSource(color) {
+        return this.#imageSourceName + color + this.#imageSourceFileType;
     }
     getImageScale() {
         return this.#imageScale;
@@ -64,6 +71,10 @@ class Intersection {
 
     getAltitude() {
         return this.#altitude;
+    }
+
+    getLockedBy() {
+        return this.#lockedBy;
     }
 
 }

@@ -166,7 +166,14 @@ class MapApplet {
         // index >= 0 : specify index
         const addIntersectionToMap = (intersection, index) => {
             if (intersection.getDataValid()) {
-                const vector = this.#createAndAddVectorPoint(this.#map, intersection.getGpsLat(), intersection.getGpsLon(), intersection.getImageSource(), intersection.getImageScale());
+                let color = 'black';
+                if(intersection.getLockedBy() != null) {
+                    if(intersection.getLockedBy() in drones) {
+                        let drone = drones[intersection.getLockedBy()];
+                        color = drone.getColor();
+                    }
+                }
+                const vector = this.#createAndAddVectorPoint(this.#map, intersection.getGpsLat(), intersection.getGpsLon(), intersection.getImageSource(color), intersection.getImageScale());
                 if (index >= 0) {
                     this.#intersectionVectors[index] = vector;
                 } else {
@@ -190,6 +197,15 @@ class MapApplet {
 
                 if (this.#intersectionVectors[i] != null) {
                     this.#updateVectorPointCoordinates(this.#intersectionVectors[i], intersection.getGpsLat(), intersection.getGpsLon());
+
+                    let color = 'black';
+                    if(intersection.getLockedBy() != null) {
+                        if(intersection.getLockedBy() in drones) {
+                            let drone = drones[intersection.getLockedBy()];
+                            color = drone.getColor();
+                        }
+                    }
+                    this.#updateVectorPointImageSource(this.#intersectionVectors[i], intersection.getImageSource(color));
                 } else {
                     // The data may have been fetched now. Try to add the
                     // intersection to the map.
@@ -260,6 +276,15 @@ class MapApplet {
                     let intersectionB = intersections[corridor.getIntersectionBId()];
 
                     this.#updateVectorLineStringCoordinates(this.#corridorVectors[i], intersectionA.getGpsLat(), intersectionA.getGpsLon(), intersectionB.getGpsLat(), intersectionB.getGpsLon());
+                    
+                    let color = 'green';
+                    if(corridor.getLockedBy() != null) {
+                        if(corridor.getLockedBy() in drones) {
+                            let drone = drones[corridor.getLockedBy()];
+                            color = drone.getColor();
+                        }
+                    }
+                    this.#updateVectorLineStringStyle(this.#corridorVectors[i], color);
                 } else {
                     // The data may have been fetched. Try to add corridor to
                     // the map
@@ -332,6 +357,21 @@ class MapApplet {
         vector.setStyle(newStyle);
     }
 
+    #updateVectorPointImageSource(vector, imageSource) {
+        let imageScale = vector.getStyle().getImage().getScale();
+        let rotation = vector.getStyle().getImage().getRotation();
+
+        let newStyle = new ol.style.Style({
+            image: new ol.style.Icon({
+                src: imageSource,
+                scale: imageScale,
+                rotation: rotation * (3.1415 / 180)
+            }),
+        })
+
+        vector.setStyle(newStyle);
+    }
+
     #createVectorLineString(latStart, lonStart, latEnd, lonEnd) {
         let points = [[lonStart, latStart], [lonEnd, latEnd]];
 
@@ -348,8 +388,9 @@ class MapApplet {
         let vectorLineLayer = new ol.layer.Vector({
             source: vectorLine,
             style: new ol.style.Style({
-                fill: new ol.style.Fill({ color: '#000000', weight: 4 }),
-                stroke: new ol.style.Stroke({ color: '#000000', width: 2 })
+                stroke: new ol.style.Stroke({
+                    color: 'green', width: 7
+                }),
             })
         });
 
@@ -377,6 +418,16 @@ class MapApplet {
         vectorLine.addFeature(featureLine);
 
         vector.setSource(vectorLine);
+    }
+
+    #updateVectorLineStringStyle(vector, color) {
+        let newStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: color, width: 7
+            }),
+        });
+
+        vector.setStyle(newStyle);
     }
 
     #autoAdjust() {

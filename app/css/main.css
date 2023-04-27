@@ -23,7 +23,7 @@
 
 #mapApplet {
     grid-area: mapApplet;
-    height: 60vh;
+    height: 90vh;
 }
 #dataValidationApplet {
     grid-area: dataValidationApplet;

@@ -152,8 +152,9 @@ function updateIntersectionList() {
                 const gpsLat = response['response_data'][intId]['gps_lat'];
                 const gpsLon = response['response_data'][intId]['gps_lon'];
                 const altitude = response['response_data'][intId]['altitude'];
+                const lockedBy = response['response_data'][intId]['locked_by'];
 
-                intersections[intId].setValues(gpsLat, gpsLon, altitude);
+                intersections[intId].setValues(gpsLat, gpsLon, altitude, lockedBy);
             }
 
             infrastructureManagementApplet.updateIntersections(intersections);
@@ -186,8 +187,9 @@ function updateCorridorList() {
             for (let corId of corridorIds) {
                 const intersectionAId = response['response_data'][corId]['intersection_a'];
                 const intersectionBId = response['response_data'][corId]['intersection_b'];
+                const lockedBy = response['response_data'][corId]['locked_by'];
 
-                corridors[corId].setValues(intersectionAId, intersectionBId);
+                corridors[corId].setValues(intersectionAId, intersectionBId, lockedBy);
             }
 
             infrastructureManagementApplet.updateCorridors(corridors);
@@ -247,16 +249,18 @@ window.onload = () => {
             updateApplets1s();
         }, 1000);
 
-        updateDroneList();
-        updateApplets5s();
         updateIntersectionList();
         updateCorridorList();
         setInterval(() => {
-            updateDroneList();
-            updateApplets5s();
-
             updateIntersectionList();
             updateCorridorList();
+        }, 2000);
+
+        updateDroneList();
+        updateApplets5s();
+        setInterval(() => {
+            updateDroneList();
+            updateApplets5s();
         }, 5000);
     }
 }

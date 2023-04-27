@@ -2,11 +2,18 @@ class Drone {
 
     #demoIndex = 0;
 
-    #droneImageSource = './img/drone.svg';
+    #color = 'black';
+
+    #droneImageSourceName = './img/Drone_';
+    #droneImageSourceFileType = '.svg';
     #droneImageScale = 1;
-    #takeoffLocationImageSource = './img/TakeoffLocation.svg';
+
+    #takeoffLocationImageSourceName = './img/TakeoffLocation_';
+    #takeoffLocationImageSourceFileType = '.svg';
     #takeoffLocationImageScale = 2;
-    #landingLocationImageSource = './img/LandingLocation.svg';
+
+    #landingLocationImageSourceName = './img/LandingLocation_';
+    #landingLocationImageSourceFileType = '.svg';
     #landingLocationImageScale = 2;
 
     #drone_id;
@@ -61,6 +68,23 @@ class Drone {
 
     constructor(drone_id) {
         this.#drone_id = drone_id;
+
+        if(drone_id == 'setup_drone') {
+            this.#color = 'red';
+        } else if(drone_id == 'demo_drone') {
+            this.#color = 'blue';
+        } else if(drone_id == 'drone_1') {
+            this.#color = 'darkcyan';
+        } else if(drone_id == 'drone_2') {
+            this.#color = 'magenta';
+        } else if(drone_id == 'drone_3') {
+            this.#color = 'orange';
+        } else if(drone_id == 'drone_4') {
+            this.#color = 'brown';
+        } else {
+            this.#color = 'black';
+        }
+
         this.setDefaultValues();
     }
 
@@ -233,21 +257,24 @@ class Drone {
         this.#operationModes = response['response_data']['operation_modes'];
     }
 
+    getColor() {
+        return this.#color;
+    }
 
     getDroneImageSource() {
-        return this.#droneImageSource;
+        return this.#droneImageSourceName + this.#color + this.#droneImageSourceFileType;
     }
     getDroneImageScale() {
         return this.#droneImageScale;
     }
     getTakeoffLocationImageSource() {
-        return this.#takeoffLocationImageSource;
+        return this.#takeoffLocationImageSourceName + this.#color + this.#takeoffLocationImageSourceFileType;
     }
     getTakeoffLocationImageScale() {
         return this.#takeoffLocationImageScale;
     }
     getLandingLocationImageSource() {
-        return this.#landingLocationImageSource;
+        return this.#landingLocationImageSourceName + this.#color + this.#landingLocationImageSourceFileType;
     }
     getLandingLocationImageScale() {
         return this.#landingLocationImageScale;
