@@ -7,7 +7,7 @@
    viewBox="0 0 13.229166 13.229167"
    version="1.1"
    id="svg5"
-   inkscape:export-filename="TakeoffLocation.png"
+   inkscape:export-filename="LandingLocation.png"
    inkscape:export-xdpi="95.3"
    inkscape:export-ydpi="95.3"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -32,7 +32,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#666666;stroke-width:0;stroke-linejoin:round"
+       style="fill:black;stroke-width:0;stroke-linejoin:round"
        id="path113"
        cx="6.6145835"
        cy="6.6145835"
@@ -44,21 +44,21 @@
        cy="6.6145835"
        r="6.0854168" />
     <circle
-       style="fill:#333333;stroke-width:0;stroke-linejoin:round"
+       style="fill:black;stroke-width:0;stroke-linejoin:round"
        id="path113-6"
        cx="6.614583"
        cy="6.614583"
        r="5.2916665" />
     <text
        xml:space="preserve"
-       style="font-size:10px;line-height:1.25;font-family:'Argentum Sans';-inkscape-font-specification:'Argentum Sans';fill:#ffffff;stroke-width:0.264584"
-       x="3.7197647"
-       y="10.114545"
+       style="font-size:10.0001px;line-height:1.25;font-family:'Argentum Sans';-inkscape-font-specification:'Argentum Sans';fill:#ffffff;stroke-width:0.264586"
+       x="4.0126615"
+       y="9.8932447"
        id="text333"><tspan
          sodipodi:role="line"
          id="tspan331"
-         style="fill:#ffffff;stroke-width:0.264584"
-         x="3.7197647"
-         y="10.114545">T</tspan></text>
+         style="fill:#ffffff;stroke-width:0.264586"
+         x="4.0126615"
+         y="9.8932447">L</tspan></text>
   </g>
 </svg>

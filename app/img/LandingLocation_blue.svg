@@ -32,7 +32,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#666666;stroke-width:0;stroke-linejoin:round"
+       style="fill:blue;stroke-width:0;stroke-linejoin:round"
        id="path113"
        cx="6.6145835"
        cy="6.6145835"
@@ -44,7 +44,7 @@
        cy="6.6145835"
        r="6.0854168" />
     <circle
-       style="fill:#333333;stroke-width:0;stroke-linejoin:round"
+       style="fill:blue;stroke-width:0;stroke-linejoin:round"
        id="path113-6"
        cx="6.614583"
        cy="6.614583"
