@@ -166,7 +166,7 @@ class MapApplet {
         // index >= 0 : specify index
         const addIntersectionToMap = (intersection, index) => {
             if (intersection.getDataValid()) {
-                let color = 'black';
+                let color = 'green';
                 if(intersection.getLockedBy() != null) {
                     if(intersection.getLockedBy() in drones) {
                         let drone = drones[intersection.getLockedBy()];
@@ -198,7 +198,7 @@ class MapApplet {
                 if (this.#intersectionVectors[i] != null) {
                     this.#updateVectorPointCoordinates(this.#intersectionVectors[i], intersection.getGpsLat(), intersection.getGpsLon());
 
-                    let color = 'black';
+                    let color = 'green';
                     if(intersection.getLockedBy() != null) {
                         if(intersection.getLockedBy() in drones) {
                             let drone = drones[intersection.getLockedBy()];
