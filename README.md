@@ -1,4 +1,4 @@
-# ADDS ControlPanel
+# ADDS-ControlPanel
 
 ## Comprehensive Visualization of Your ADDS Drone Fleet Data
 
@@ -33,8 +33,7 @@ server.
 ## Applets
 
 The application comprises multiple applets, each designed to visualize specific
-datasets. Adding or removing drones from the list in the main script
-automatically updates all applets.
+datasets. Adding or removing drones automatically updates all applets.
 
 ### MapApplet
 
@@ -65,7 +64,8 @@ management and enhances decision-making processes.
 
 This applet allows for the efficient management of your drone infrastructure. It
 lets you add, remove, or modify the intersections and corridors that are stored
-in and managed by the Flight Control system.
+in and managed by the [Flight Control](https://github.com/Andreas-Menzel/ADDS-FlightControl)
+system.
 
 ![InfrastructureManagementApplet-Intersections](images/InfrastructureManagementApplet_Intersections.png)
 
