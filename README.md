@@ -8,8 +8,8 @@ state of charge, and much more. Whether you want to monitor live-data or
 analyze flight parameters from previous flights, ADDS-ControlPanel provides an
 intuitive interface with an interactive OSM map and clear data charts.
 
-**Note:** [ADDS-FlightControl](https://github.com/ADDS-FlightControl) is a
-prerequisite as it acts as the data management system.
+**Note:** [ADDS-FlightControl](https://github.com/Andreas-Menzel/ADDS-FlightControl)
+is a prerequisite as it acts as the data management system.
 
 ## Quick Setup
 
