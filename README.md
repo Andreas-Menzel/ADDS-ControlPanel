@@ -1,71 +1,100 @@
 # ADDS ControlPanel
 
-## Visualize blackbox data and more from your ADDS drone fleet
+## Comprehensive Visualization of Your ADDS Drone Fleet Data
 
-ADDS-ControlPanel can visualize your drone's data like GPS-location,
-takeoff / landing location, altitude, velocity, battery state of charge and
-much more. Show live-data or check flight parameters of previous flights with
-an interactive OSM map and simple data charts.
+ADDS-ControlPanel offers a holistic view of your drone's key performance metrics
+such as GPS-location, takeoff/landing locations, altitude, velocity, battery
+state of charge, and much more. Whether you want to monitor live-data or
+analyze flight parameters from previous flights, ADDS-ControlPanel provides an
+intuitive interface with an interactive OSM map and clear data charts.
 
-**Note:** ADDS-FlightControl is needed as the data management system.
+**Note:** [ADDS-FlightControl](https://github.com/ADDS-FlightControl) is a
+prerequisite as it acts as the data management system.
 
-## Setup
+## Quick Setup
 
-Clone the repository:
+1. **Clone the repository:**
 
 ```bash
 git clone https://github.com/Andreas-Menzel/ADDS-ControlPanel.git
 ```
 
-Update the URL to your Flight Control instance by changing the
-`flightControlUrl` constant in `/app/js/main.js`:
+2. **Update Flight Control Instance URL:** Modify the `flightControlUrl` constant
+in `/app/js/main.js` to match your Flight Contron instance.
 
 ```javascript
 const flightControlUrl = 'http://adds-demo.an-men.de/';
 ```
 
-Open the website (/app/index.html). Currently no server-side features are
-implemented, so an installation on a web-server on not necessary.
+3. **Access the Website:** Navigate to `/app/index.html`. No server-side
+features are currently implemented, so there's no need for installation on a web
+server.
 
 ## Applets
 
-The application consists of multiple applets. Each applet can visualize a
-specific dataset. Adding or removing drones from the list in the main script
-results in all applets automatically updating.
+The application comprises multiple applets, each designed to visualize specific
+datasets. Adding or removing drones from the list in the main script
+automatically updates all applets.
 
 ### MapApplet
 
-Shows an interactive map using OpenStreetMaps to visualize the position of each
-drone, takeoff and landing site. The map automatically adjusts the center and
-zoom-level to the position of all drones currently active, so everything of
-interest is visible all the time.
+Presents an interactive map using OpenStreetMaps to display each drone's
+position, as well as takeoff and landing sites. The map automatically adjusts
+the center and zoom-level according to the positions of all active drones,
+ensuring you never miss any important detail.
 
 ![MapApplet](images/MapApplet.png)
 
+### DataValidationApplet
+
+This applet provides an organized and straightforward way to review all data
+sent from each drone. Displayed in easy-to-read tables, you can inspect critical
+flight details like GPS coordinates, altitude, velocity, and more. The ability
+to quickly overview and analyze these data contributes to effective fleet
+management and enhances decision-making processes.
+
+![DataValidationApplet-AircraftLocation](images/DataValidationApplet_AircraftLocation.png)
+
+![DataValidationApplet-AircraftPower](images/DataValidationApplet_AircraftPower.png)
+
+![DataValidationApplet-FlightData](images/DataValidationApplet_FlightData.png)
+
+![DataValidationApplet-MissionData](images/DataValidationApplet_MissionData.png)
+
+### InfrastructureManagementApplet
+
+This applet allows for the efficient management of your drone infrastructure. It
+lets you add, remove, or modify the intersections and corridors that are stored
+in and managed by the Flight Control system.
+
+![InfrastructureManagementApplet-Intersections](images/InfrastructureManagementApplet_Intersections.png)
+
+![InfrastructureManagementApplet-Corridors](images/InfrastructureManagementApplet_Corridors.png)
+
 ### DroneAltitudeApplet
 
-Shows the altitude of each drone using a bar graph. Simple, but effective.
+Displays each drone's altitude using a simple yet effective bar graph.
 
 ![DroneAltitudeApplet](images/DroneAltitudeApplet.png)
 
 ### DroneVelocityApplet
 
-Shows the velocity of each drone using a bar graph. Switching between the
-NED (North-East-Down) and NWU (North-West-Up) system is possible. You can also
-change the unit from m/s to km/h.
+Illustrates the velocity of each drone using a bar graph. It allows for
+switching between the NED (North-East-Down) and NWU (North-West-Up) system. You
+can also toggle the unit from m/s to km/h.
 
 ![DroneVelocityApplet](images/DroneVelocityApplet.png)
 
 ### DroneSoCApplet
 
-Shows the batteries state of charge of each drone using bar graphs. The bars
-become orange on < 40% soc and red on < 20% soc.
+Visualizes the battery state of charge for each drone using bar graphs. The bars
+change color to orange when the charge is below 40% and red when it's below 20%.
 
 ![DroneSoCApplet](images/DroneSoCApplet.png)
 
 ### DroneRemDistApplet
 
-Shows the remaining flight radius of each drone using bar graphs. The bars
-become orange on < 2km range and red on < 1 km range.
+Shows the remaining flight radius of each drone using bar graphs. The bars turn
+orange when the range is less than 2km and red when it's less than 1 km.
 
 ![DroneRemDistApplet](images/DroneRemDistApplet.png)
