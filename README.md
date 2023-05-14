@@ -98,3 +98,14 @@ Shows the remaining flight radius of each drone using bar graphs. The bars turn
 orange when the range is less than 2km and red when it's less than 1 km.
 
 ![DroneRemDistApplet](images/DroneRemDistApplet.png)
+
+# 💡 Clarification on Content Creation and Contributions
+
+Please note that this README file, as well as the release notes associated with
+this repository, were created with the assistance of OpenAI's GPT-4, a powerful
+language model. However, it's important to emphasize that all other elements of
+this repository, including but not limited to documentation, code, images, etc.,
+were personally created by me, unless explicitly stated otherwise. The AI model
+served solely as a tool to help formulate these textual content, while the
+conceptualization, execution, and finalization of the entire project were
+carried out independently.
